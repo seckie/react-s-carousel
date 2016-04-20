@@ -1,31 +1,26 @@
 "use strict";
 var gulp = require("gulp");
-var jade = require("gulp-jade");
 var stylus = require("gulp-stylus");
 var webpack = require("gulp-webpack");
 var nib = require("nib");
 var browserSync = require("browser-sync");
 var notify = require("gulp-notify");
-var data = require("gulp-data");
 var rename = require("gulp-rename");
 
+var PUBLIC_PATH = "./public/";
 var PATHS = {
-  data: "./data.json",
-
-  jade: [ "src/jade/**/*.jade" ],
-  jadeEntry: [ "src/jade/**/!(_)*.jade" ],
-  htmlDir: "./",
+  htmlDir: PUBLIC_PATH,
 
   jsx: [ "src/jsx/**/*.jsx" ],
   jsxMain: "src/jsx/main.jsx",
-  js: [ "./js/**/*.js" ],
-  jsDir: "./js",
-  jsMain: "./js/main.js",
+  js: [ PUBLIC_PATH + "js/**/*.js" ],
+  jsDir: PUBLIC_PATH + "js",
+  jsMain: PUBLIC_PATH + "js/main.js",
 
   stylus: [ "src/stylus/**/*.styl" ],
   stylusEntry: [ "src/stylus/**/!(_)*.styl" ],
-  css: [ "./css/**/*.css" ],
-  cssDir: "./css",
+  css: [ PUBLIC_PATH + "css/**/*.css" ],
+  cssDir: PUBLIC_PATH + "css"
 };
 
 var errorHandler = function (e) {
@@ -37,13 +32,6 @@ var errorHandler = function (e) {
   }).apply(this, args);
   this.emit("end");
 };
-
-gulp.task("jade", function () {
-  return gulp.src(PATHS.jadeEntry)
-    .pipe(jade({ pretty: true }))
-    .on("error", errorHandler)
-    .pipe(gulp.dest(PATHS.htmlDir));
-});
 
 gulp.task("stylus", function () {
   return gulp.src(PATHS.stylusEntry)
@@ -80,7 +68,7 @@ gulp.task("default", function () {
   browserSync.init({
     open: false,
     server: {
-      baseDir: "./",
+      baseDir: "./public",
       middleware: [
         function (req, res, next) {
           var msg = req.method + " " + req.url;
@@ -90,7 +78,6 @@ gulp.task("default", function () {
       ]
     }
   });
-  gulp.watch(PATHS.jade, [ "jade" ]);
   gulp.watch(PATHS.stylus, [ "stylus" ]);
   gulp.watch(PATHS.jsx, [ "build" ]);
 });

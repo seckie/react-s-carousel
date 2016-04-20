@@ -1,7 +1,3 @@
-# module-name
+# react-s-carousel
 
-Some module (on Some framework)
-
-See demo:
-
-- http://seckie.github.com/some-module/
+React simple carousel component
