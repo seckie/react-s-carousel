@@ -1,0 +1,29 @@
+{
+  "name": "package",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seckie/SOMETHING.git"
+  },
+  "author": "seckie",
+  "devDependencies": {
+    "babel-core": "^6.7.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "browser-sync": "^2.11.1",
+    "gulp": "^3.9.1",
+    "gulp-jade": "^1.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-stylus": "^2.3.1",
+    "gulp-webpack": "^1.5.0",
+    "nib": "^1.1.0"
+  },
+  "dependencies": {
+    "immutable": "^3.7.6",
+    "lodash": "^4.6.1",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7"
+  }
+}
