@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else {
+		var a = factory();
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -20249,7 +20259,9 @@
 	      }
 	      if (!this.state.playing) {
 	        clearTimeout(timer);
-	        if (this.props.autoPlay) {
+	        var isAfterClick = this.state.enableClick === false;
+	        var shouldBePause = isAfterClick && this.props.pauseOnAction;
+	        if (this.props.autoPlay && !shouldBePause) {
 	          timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
 	        }
 	      }
@@ -20336,6 +20348,7 @@
 	  dots: _react2.default.PropTypes.bool,
 	  duration: _react2.default.PropTypes.number,
 	  initialSlide: _react2.default.PropTypes.number,
+	  pauseOnAction: _react2.default.PropTypes.bool,
 	  slides: _react2.default.PropTypes.array,
 	  width: _react2.default.PropTypes.number
 	};
@@ -20347,6 +20360,7 @@
 	  dots: true,
 	  duration: 500,
 	  initialSlide: 0,
+	  pauseOnAction: true,
 	  slides: [],
 	  width: 0
 	};
@@ -36564,4 +36578,6 @@
 	exports.default = Slides;
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;
