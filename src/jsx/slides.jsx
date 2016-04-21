@@ -24,9 +24,7 @@ class Slides extends Component {
       };
       return (
         <div key={`slide${i}`} className={cName} style={style}>
-        <a href={slide.href}>
-        <img src={slide.imgSrc} alt={slide.imgAlt} />
-        </a>
+        {slide}
         </div>
       );
     });
