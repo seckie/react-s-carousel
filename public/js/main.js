@@ -19384,7 +19384,11 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _Slides = __webpack_require__(164);
+	var _classnames = __webpack_require__(164);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _Slides = __webpack_require__(165);
 
 	var _Slides2 = _interopRequireDefault(_Slides);
 
@@ -19397,6 +19401,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var timer;
+	var prefix = "scarousel";
 
 	var ReactSCarousel = function (_Component) {
 	  _inherits(ReactSCarousel, _Component);
@@ -19432,13 +19437,13 @@
 	        clearTimeout(timer);
 	        return;
 	      }
-	      this._updateIndex(1);
+	      var index = this.state.index + 1;
+	      this._updateIndex(index);
 	      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
 	    }
 	  }, {
 	    key: "_updateIndex",
-	    value: function _updateIndex(tick) {
-	      var index = this.state.index + tick;
+	    value: function _updateIndex(index) {
 	      var min = 0;
 	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
 	      if (index < min) {
@@ -19460,7 +19465,8 @@
 	    key: "onClickNext",
 	    value: function onClickNext() {
 	      if (this.state.enableClick) {
-	        this._updateIndex(1);
+	        var index = this.state.index + 1;
+	        this._updateIndex(index);
 	        this._updateStateOnClick();
 	      }
 	    }
@@ -19468,8 +19474,20 @@
 	    key: "onClickPrev",
 	    value: function onClickPrev() {
 	      if (this.state.enableClick) {
-	        this._updateIndex(-1);
+	        var index = this.state.index - 1;
+	        this._updateIndex(index);
 	        this._updateStateOnClick();
+	      }
+	    }
+	  }, {
+	    key: "onClickDot",
+	    value: function onClickDot(e) {
+	      if (this.state.enableClick) {
+	        var index = +e.currentTarget.dataset.index;
+	        if (index !== this.state.index) {
+	          this._updateIndex(index);
+	          this._updateStateOnClick();
+	        }
 	      }
 	    }
 	  }, {
@@ -19506,18 +19524,7 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      if (this.props.arrows) {
-	        var nextArrow = _react2.default.createElement(
-	          "button",
-	          { className: "arrow next", onClick: this.onClickNext.bind(this) },
-	          "Next"
-	        );
-	        var prevArrow = _react2.default.createElement(
-	          "button",
-	          { className: "arrow prev", onClick: this.onClickPrev.bind(this) },
-	          "Prev"
-	        );
-	      }
+	      var _this2 = this;
 
 	      var width = this.state.width || this.props.width;
 	      var style = {
@@ -19537,12 +19544,49 @@
 	        onTransitionEnd: this.onTransitionEnd.bind(this),
 	        enableTransition: this.state.enableTransition
 	      };
+
+	      if (this.props.dots) {
+	        var dots = slides.map(function (slide, i) {
+	          if (i === 0 || slides.length - 1 <= i) {
+	            return "";
+	          }
+	          var cName = (0, _classnames2.default)(prefix + "-dot", {
+	            active: _this2.state.index === i
+	          });
+	          return _react2.default.createElement(
+	            "button",
+	            { className: cName, key: "dot" + i,
+	              "data-index": i,
+	              onClick: _this2.onClickDot.bind(_this2) },
+	            i
+	          );
+	        });
+	      }
+	      if (this.props.arrows) {
+	        var prevArrow = _react2.default.createElement(
+	          "button",
+	          { className: prefix + "-arrow prev",
+	            onClick: this.onClickPrev.bind(this) },
+	          "Prev"
+	        );
+	        var nextArrow = _react2.default.createElement(
+	          "button",
+	          { className: prefix + "-arrow next",
+	            onClick: this.onClickNext.bind(this) },
+	          "Next"
+	        );
+	      }
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "scarousel", style: style },
 	        _react2.default.createElement(_Slides2.default, slidesProps),
+	        prevArrow,
 	        nextArrow,
-	        prevArrow
+	        _react2.default.createElement(
+	          "div",
+	          { className: prefix + "-dots" },
+	          dots
+	        )
 	      );
 	    }
 	  }]);
@@ -19551,24 +19595,26 @@
 	}(_react.Component);
 
 	ReactSCarousel.propTypes = {
-	  slides: _react2.default.PropTypes.array,
 	  arrows: _react2.default.PropTypes.bool,
-	  initialSlide: _react2.default.PropTypes.number,
 	  autoPlay: _react2.default.PropTypes.bool,
 	  autoPlayInterval: _react2.default.PropTypes.number,
-	  width: _react2.default.PropTypes.number,
+	  cssEase: _react2.default.PropTypes.string,
+	  dots: _react2.default.PropTypes.bool,
 	  duration: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string
+	  initialSlide: _react2.default.PropTypes.number,
+	  slides: _react2.default.PropTypes.array,
+	  width: _react2.default.PropTypes.number
 	};
 	ReactSCarousel.defaultProps = {
-	  slides: [],
 	  arrows: true,
-	  initialSlide: 0,
 	  autoPlay: true,
 	  autoPlayInterval: 3000,
-	  width: 0,
+	  cssEase: "ease-in-out",
+	  dots: true,
 	  duration: 500,
-	  cssEase: "ease-in-out"
+	  initialSlide: 0,
+	  slides: [],
+	  width: 0
 	};
 
 	exports.default = ReactSCarousel;
@@ -35627,6 +35673,60 @@
 /* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -35643,7 +35743,7 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(165);
+	var _classnames = __webpack_require__(164);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -35732,60 +35832,6 @@
 	};
 
 	exports.default = Slides;
-
-/***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-		'use strict';
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = [];
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-
-			return classes.join(' ');
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
 
 /***/ }
 /******/ ]);

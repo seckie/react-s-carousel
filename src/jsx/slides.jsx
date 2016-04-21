@@ -46,21 +46,21 @@ class Slides extends Component {
 }
 
 Slides.propTypes = {
-  slides: React.PropTypes.array,
-  width: React.PropTypes.number,
-  index: React.PropTypes.number,
-  duration: React.PropTypes.number,
-  cssEase: React.PropTypes.string,
-  loop: React.PropTypes.func,
+  slides         : React.PropTypes.array,
+  width          : React.PropTypes.number,
+  index          : React.PropTypes.number,
+  duration       : React.PropTypes.number,
+  cssEase        : React.PropTypes.string,
+  loop           : React.PropTypes.func,
   onTransitionEnd: React.PropTypes.func,
 };
 Slides.defaultProps = {
-  slides: [],
-  width: 0,
-  index: 0,
-  duration: 500,
-  cssEase: "ease-in-out",
-  loop: function () {},
+  slides         : [],
+  width          : 0,
+  index          : 0,
+  duration       : 500,
+  cssEase        : "ease-in-out",
+  loop           : function () {},
   onTransitionEnd: function () {},
 };
 

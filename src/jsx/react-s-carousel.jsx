@@ -3,9 +3,11 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import _ from "lodash";
+import classnames from "classnames";
 import Slides from "./Slides.jsx";
 
 var timer;
+var prefix = "scarousel";
 
 class ReactSCarousel extends Component {
   constructor (props) {
@@ -31,11 +33,11 @@ class ReactSCarousel extends Component {
       clearTimeout(timer);
       return;
     }
-    this._updateIndex(1);
+    var index = this.state.index + 1;
+    this._updateIndex(index);
     timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
   }
-  _updateIndex (tick) {
-    var index = this.state.index + tick;
+  _updateIndex (index) {
     var min = 0;
     var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
     if (index < min) {
@@ -53,14 +55,25 @@ class ReactSCarousel extends Component {
   }
   onClickNext () {
     if (this.state.enableClick) {
-      this._updateIndex(1);
+      var index = this.state.index + 1;
+      this._updateIndex(index);
       this._updateStateOnClick();
     }
   }
   onClickPrev () {
     if (this.state.enableClick) {
-      this._updateIndex(-1);
+      var index = this.state.index - 1;
+      this._updateIndex(index);
       this._updateStateOnClick();
+    }
+  }
+  onClickDot (e) {
+    if (this.state.enableClick) {
+      var index = +e.currentTarget.dataset.index;
+      if (index !== this.state.index) {
+        this._updateIndex(index);
+        this._updateStateOnClick();
+      }
     }
   }
   loop () {
@@ -91,17 +104,6 @@ class ReactSCarousel extends Component {
     this.setState(state);
   }
   render () {
-    if (this.props.arrows) {
-      var nextArrow = (
-        <button className="arrow next" onClick={this.onClickNext.bind(this)}>
-          Next</button>
-      );
-      var prevArrow = (
-        <button className="arrow prev" onClick={this.onClickPrev.bind(this)}>
-          Prev</button>
-      );
-    }
-
     var width = this.state.width || this.props.width;
     var style = {
       width: width || "100%",
@@ -120,35 +122,68 @@ class ReactSCarousel extends Component {
       onTransitionEnd: this.onTransitionEnd.bind(this),
       enableTransition: this.state.enableTransition,
     };
+
+    if (this.props.dots) {
+      var dots = slides.map((slide, i) => {
+        if (i === 0 || slides.length - 1 <= i) {
+          return "";
+        }
+        var cName = classnames(`${prefix}-dot`, {
+          active: this.state.index === i
+        });
+        return (
+          <button className={cName} key={`dot${i}`}
+            data-index={i}
+            onClick={this.onClickDot.bind(this)}>{i}</button>
+        );
+      });
+    }
+    if (this.props.arrows) {
+      var prevArrow = (
+        <button className={`${prefix}-arrow prev`}
+          onClick={this.onClickPrev.bind(this)}>
+          Prev</button>
+      );
+      var nextArrow = (
+        <button className={`${prefix}-arrow next`}
+          onClick={this.onClickNext.bind(this)}>
+          Next</button>
+      );
+    }
     return (
       <div className="scarousel" style={style}>
         <Slides {...slidesProps} />
-        {nextArrow}
         {prevArrow}
+        {nextArrow}
+        <div className={`${prefix}-dots`}>
+          {dots}
+        </div>
       </div>
     );
   }
 }
 
 ReactSCarousel.propTypes = {
-  slides: React.PropTypes.array,
-  arrows: React.PropTypes.bool,
-  initialSlide: React.PropTypes.number,
-  autoPlay: React.PropTypes.bool,
+  arrows          : React.PropTypes.bool,
+  autoPlay        : React.PropTypes.bool,
   autoPlayInterval: React.PropTypes.number,
-  width: React.PropTypes.number,
-  duration: React.PropTypes.number,
-  cssEase: React.PropTypes.string,
+  cssEase         : React.PropTypes.string,
+  dots            : React.PropTypes.bool,
+  duration        : React.PropTypes.number,
+  initialSlide    : React.PropTypes.number,
+  slides          : React.PropTypes.array,
+  width           : React.PropTypes.number,
 };
 ReactSCarousel.defaultProps = {
-  slides: [],
-  arrows: true,
-  initialSlide: 0,
-  autoPlay: true,
+  arrows          : true,
+  autoPlay        : true,
   autoPlayInterval: 3000,
-  width: 0,
-  duration: 500,
-  cssEase: "ease-in-out",
+  cssEase         : "ease-in-out",
+  dots            : true,
+  duration        : 500,
+  initialSlide    : 0,
+  slides          : [],
+  width           : 0,
 };
 
 export default ReactSCarousel;

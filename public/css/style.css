@@ -133,6 +133,9 @@ body {
 .scarousel img {
   vertical-align: bottom;
 }
+.scarousel-dot.active {
+  background-color: #fcc;
+}
 .scarousel-slides {
   zoom: 1;
 }
