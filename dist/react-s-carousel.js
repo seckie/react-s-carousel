@@ -1,4 +1,14 @@
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("react"), require("react-dom"), require("lodash"), require("classnames"));
+	else if(typeof define === 'function' && define.amd)
+		define(["react", "react-dom", "lodash", "classnames"], factory);
+	else {
+		var a = typeof exports === 'object' ? factory(require("react"), require("react-dom"), require("lodash"), require("classnames")) : factory(root["React"], root["ReactDOM"], root["_"], root["classNames"]);
+		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+	}
+})(this, function(__WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -46,102 +56,6 @@
 
 	"use strict";
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(2);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _reactSCarousel = __webpack_require__(3);
-
-	var _reactSCarousel2 = _interopRequireDefault(_reactSCarousel);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var list = [{ href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
-
-	var App = function (_Component) {
-	  _inherits(App, _Component);
-
-	  function App(props) {
-	    _classCallCheck(this, App);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
-
-	    _this.state = {
-	      autoPlay: true
-	    };
-	    return _this;
-	  }
-
-	  _createClass(App, [{
-	    key: "toggleAutoPlay",
-	    value: function toggleAutoPlay() {
-	      this.setState({
-	        autoPlay: !this.state.autoPlay
-	      });
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var slides = list.map(function (slide, i) {
-	        return _react2.default.createElement(
-	          "a",
-	          { href: slide.href, key: "slide" + i },
-	          _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
-	        );
-	      });
-	      var props = {
-	        slides: slides,
-	        autoPlay: this.state.autoPlay,
-	        width: 800
-	      };
-	      return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(_reactSCarousel2.default, props),
-	        _react2.default.createElement(
-	          "button",
-	          { className: "toggle", onClick: this.toggleAutoPlay.bind(this) },
-	          "Toggle autoPlay"
-	        )
-	      );
-	    }
-	  }]);
-
-	  return App;
-	}(_react.Component);
-
-	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById("app"));
-
-/***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-	module.exports = React;
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	module.exports = ReactDOM;
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -156,15 +70,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(5);
+	var _classnames = __webpack_require__(4);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _Slides = __webpack_require__(6);
+	var _Slides = __webpack_require__(5);
 
 	var _Slides2 = _interopRequireDefault(_Slides);
 
@@ -411,19 +325,31 @@
 	exports.default = ReactSCarousel;
 
 /***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+
+/***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-	module.exports = _;
+	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
 /***/ },
 /* 5 */
-/***/ function(module, exports) {
-
-	module.exports = classNames;
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -438,11 +364,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(4);
+	var _lodash = __webpack_require__(3);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(5);
+	var _classnames = __webpack_require__(4);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -529,4 +455,6 @@
 	exports.default = Slides;
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;
