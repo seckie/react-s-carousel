@@ -27,6 +27,17 @@ class ReactSCarousel extends Component {
       timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
     }
   }
+  componentWillUpdate (nextProps) {
+    if (this.props.autoPlay !== nextProps.autoPlay) {
+      this.setState({
+        playing: nextProps.autoPlay
+      });
+      if (nextProps.autoPlay) {
+        clearTimeout(timer);
+        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+      }
+    }
+  }
 
   _tick () {
     if (!this.state.playing) {
@@ -99,7 +110,9 @@ class ReactSCarousel extends Component {
     }
     if (!this.state.playing) {
       clearTimeout(timer);
-      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+      if (this.props.autoPlay) {
+        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+      }
     }
     this.setState(state);
   }

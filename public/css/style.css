@@ -130,11 +130,19 @@ body {
   height: 100%;
   background-color: transparent;
 }
+button.toggle {
+  margin: 10px;
+  padding: 10px;
+}
+.scarousel button {
+  margin: 10px;
+  padding: 10px;
+}
 .scarousel img {
   vertical-align: bottom;
 }
 .scarousel-dot.active {
-  background-color: #fcc;
+  color: #f00;
 }
 .scarousel-slides {
   zoom: 1;
