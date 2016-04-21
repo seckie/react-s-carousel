@@ -1,7 +1,10 @@
 "use strict";
 
 module.exports = {
-  output: { filename: "react-s-carousel.js" },
+  output: {
+    filename: "react-s-carousel.js",
+    libraryTarget: "umd"
+  },
   module: {
     loaders: [
       { test: /\.jsx$/, exclude: /node_modules/, loader: "babel" }
@@ -12,24 +15,28 @@ module.exports = {
   },
   externals: {
     "react": {
-      "var": "React",
+      root: "React",
       commonjs: "react",
-      commonjs2: "react"
+      commonjs2: "react",
+      amd: "react"
     },
     "react-dom": {
-      "var": "ReactDOM",
+      root: "ReactDOM",
       commonjs: "react-dom",
-      commonjs2: "react-dom"
+      commonjs2: "react-dom",
+      amd: "react-dom"
     },
     "lodash": {
-      "var": "_",
+      root: "_",
       commonjs: "lodash",
-      commonjs2: "lodash"
+      commonjs2: "lodash",
+      amd: "lodash"
     },
     "classnames": {
-      "var": "classNames",
+      root: "classNames",
       commonjs: "classnames",
-      commonjs2: "classnames"
+      commonjs2: "classnames",
+      amd: "classnames"
     }
   }
 };

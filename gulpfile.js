@@ -15,11 +15,10 @@ var PATHS = {
   htmlDir: PUBLIC_PATH,
 
   jsx: [ "src/jsx/**/*.jsx" ],
-  jsxMain: "src/jsx/main.jsx",
+  jsxWeb: "src/jsx/main.jsx",
+  jsxMain: "src/jsx/react-s-carousel.jsx",
   js: [ PUBLIC_PATH + "js/**/*.js" ],
   jsDir: PUBLIC_PATH + "js",
-  jsMain: PUBLIC_PATH + "js/main.js",
-
   distDir: "./dist",
 
   stylus: [ "src/stylus/**/*.styl" ],
@@ -50,7 +49,7 @@ gulp.task("build", function () {
   var config = _.assign({}, webpackConfig);
   config.output.filename = "main.js";
   config.externals = {};
-  return gulp.src(PATHS.jsxMain)
+  return gulp.src(PATHS.jsxWeb)
     .pipe(webpack(config))
     .on("error", errorHandler)
     .pipe(gulp.dest(PATHS.jsDir))
