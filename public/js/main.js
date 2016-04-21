@@ -68,7 +68,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var slides = [{ href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
+	var list = [{ href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -94,6 +94,13 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
+	      var slides = list.map(function (slide, i) {
+	        return _react2.default.createElement(
+	          "a",
+	          { href: slide.href, key: "slide" + i },
+	          _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
+	        );
+	      });
 	      var props = {
 	        slides: slides,
 	        autoPlay: this.state.autoPlay,
@@ -35855,11 +35862,7 @@
 	        return _react2.default.createElement(
 	          "div",
 	          { key: "slide" + i, className: cName, style: style },
-	          _react2.default.createElement(
-	            "a",
-	            { href: slide.href },
-	            _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
-	          )
+	          slide
 	        );
 	      });
 	      var transition = this.props.enableTransition ? "transform " + this.props.duration + "ms " + this.props.cssEase : "none";
