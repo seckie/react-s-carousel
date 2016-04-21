@@ -110,7 +110,9 @@ class ReactSCarousel extends Component {
     }
     if (!this.state.playing) {
       clearTimeout(timer);
-      if (this.props.autoPlay) {
+      var isAfterClick = this.state.enableClick === false;
+      var shouldBePause = isAfterClick && this.props.pauseOnAction;
+      if (this.props.autoPlay && !shouldBePause) {
         timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
       }
     }
@@ -184,6 +186,7 @@ ReactSCarousel.propTypes = {
   dots            : React.PropTypes.bool,
   duration        : React.PropTypes.number,
   initialSlide    : React.PropTypes.number,
+  pauseOnAction   : React.PropTypes.bool,
   slides          : React.PropTypes.array,
   width           : React.PropTypes.number,
 };
@@ -195,6 +198,7 @@ ReactSCarousel.defaultProps = {
   dots            : true,
   duration        : 500,
   initialSlide    : 0,
+  pauseOnAction   : true,
   slides          : [],
   width           : 0,
 };
