@@ -139,17 +139,14 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.scarousel .slide.active {
-  border: 1px solid #f00;
-}
-.scarousel-slides {
+.scarousel .slide .scarousel-slides {
   zoom: 1;
 }
-.scarousel-slides:before,
-.scarousel-slides:after {
+.scarousel .slide .scarousel-slides:before,
+.scarousel .slide .scarousel-slides:after {
   content: "";
   display: table;
 }
-.scarousel-slides:after {
+.scarousel .slide .scarousel-slides:after {
   clear: both;
 }

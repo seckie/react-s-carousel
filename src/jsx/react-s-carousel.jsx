@@ -69,7 +69,9 @@ class ReactSCarousel extends Component {
     var slidesProps = {
       slides: this.props.slides,
       width: width,
-      index: this.state.index
+      index: this.state.index,
+      duration: this.props.duration,
+      cssEase: this.props.cssEase,
     };
     return (
       <div className="scarousel" style={style}>
@@ -88,6 +90,8 @@ ReactSCarousel.propTypes = {
   autoPlay: React.PropTypes.bool,
   autoPlayInterval: React.PropTypes.number,
   width: React.PropTypes.number,
+  duration: React.PropTypes.number,
+  cssEase: React.PropTypes.string,
 };
 ReactSCarousel.defaultProps = {
   slides: [],
@@ -96,6 +100,8 @@ ReactSCarousel.defaultProps = {
   autoPlay: true,
   autoPlayInterval: 3000,
   width: 0,
+  duration: 500,
+  cssEase: "ease-in-out",
 };
 
 export default ReactSCarousel;

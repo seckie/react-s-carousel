@@ -27,6 +27,7 @@ class Slides extends Component {
     var slidesStyle = {
       width: this.props.width * this.props.slides.length,
       transform: `translateX(${-this.props.width * this.props.index}px)`,
+      transition: `transform ${this.props.duration}ms ${this.props.cssEase}`
     };
     return (
       <div className="scarousel-slides" style={slidesStyle}>

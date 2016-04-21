@@ -18799,7 +18799,9 @@
 	      var slidesProps = {
 	        slides: this.props.slides,
 	        width: width,
-	        index: this.state.index
+	        index: this.state.index,
+	        duration: this.props.duration,
+	        cssEase: this.props.cssEase
 	      };
 	      return _react2.default.createElement(
 	        "div",
@@ -18820,7 +18822,9 @@
 	  initialSlide: _react2.default.PropTypes.number,
 	  autoPlay: _react2.default.PropTypes.bool,
 	  autoPlayInterval: _react2.default.PropTypes.number,
-	  width: _react2.default.PropTypes.number
+	  width: _react2.default.PropTypes.number,
+	  duration: _react2.default.PropTypes.number,
+	  cssEase: _react2.default.PropTypes.string
 	};
 	ReactSCarousel.defaultProps = {
 	  slides: [],
@@ -18828,7 +18832,9 @@
 	  initialSlide: 0,
 	  autoPlay: true,
 	  autoPlayInterval: 3000,
-	  width: 0
+	  width: 0,
+	  duration: 500,
+	  cssEase: "ease-in-out"
 	};
 
 	exports.default = ReactSCarousel;
@@ -18895,7 +18901,8 @@
 	      });
 	      var slidesStyle = {
 	        width: this.props.width * this.props.slides.length,
-	        transform: "translateX(" + -this.props.width * this.props.index + "px)"
+	        transform: "translateX(" + -this.props.width * this.props.index + "px)",
+	        transition: "transform " + this.props.duration + "ms " + this.props.cssEase
 	      };
 	      return _react2.default.createElement(
 	        "div",
