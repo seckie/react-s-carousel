@@ -21,6 +21,7 @@
     "nib": "^1.1.0"
   },
   "dependencies": {
+    "classnames": "^2.2.3",
     "immutable": "^3.7.6",
     "lodash": "^4.6.1",
     "react": "^0.14.7",

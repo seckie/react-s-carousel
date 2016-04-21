@@ -38,6 +38,7 @@ gulp.task("stylus", function () {
     .pipe(stylus({ use: [ nib() ] }))
     .on("error", errorHandler)
     .pipe(gulp.dest(PATHS.cssDir))
+    .pipe(browserSync.stream());
 });
 
 gulp.task("build", function () {

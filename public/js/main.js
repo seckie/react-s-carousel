@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var slides = [{ href: "http://github.com/seckie", imgsrc: "img/slide1.png", imgalt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgsrc: "img/slide2.png", imgalt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgsrc: "img/slide3.png", imgalt: "Slide3 Alt" }];
+	var slides = [{ href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
 
 	_reactDom2.default.render(_react2.default.createElement(_reactSCarousel2.default, { slides: slides }), document.getElementById("app"));
 
@@ -18698,6 +18698,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _classnames = __webpack_require__(149);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18706,33 +18710,104 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var timer;
+
 	var ReactSCarousel = function (_Component) {
 	  _inherits(ReactSCarousel, _Component);
 
 	  function ReactSCarousel(props) {
 	    _classCallCheck(this, ReactSCarousel);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
+
+	    _this.state = {
+	      index: props.initialSlide,
+	      playing: props.autoPlay
+	    };
+	    return _this;
 	  }
 
 	  _createClass(ReactSCarousel, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      if (this.state.playing) {
+	        this._tick();
+	      }
+	    }
+	  }, {
+	    key: "_tick",
+	    value: function _tick() {
+	      if (!this.state.playing) {
+	        clearTimeout(timer);
+	        return;
+	      }
+	      this._updateIndex(1);
+	      setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	    }
+	  }, {
+	    key: "_updateIndex",
+	    value: function _updateIndex(tick) {
+	      var index = this.state.index + tick;
+	      var min = 0;
+	      var max = this.props.slides.length - 1;
+	      if (index < min) {
+	        index = max;
+	      } else if (max < index) {
+	        index = min;
+	      }
+	      this.setState({ index: index });
+	    }
+	  }, {
+	    key: "onClickNext",
+	    value: function onClickNext() {
+	      this._updateIndex(1);
+	    }
+	  }, {
+	    key: "onClickPrev",
+	    value: function onClickPrev() {
+	      this._updateIndex(-1);
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
-	      var slides = this.props.slides.map(function (slide) {
+	      var _this2 = this;
+
+	      var slides = this.props.slides.map(function (slide, i) {
+	        var cName = (0, _classnames2.default)("slide", {
+	          active: _this2.state.index === i
+	        });
 	        return _react2.default.createElement(
 	          "div",
-	          { className: "slide" },
+	          { className: cName },
 	          _react2.default.createElement(
 	            "a",
 	            { href: slide.href },
-	            _react2.default.createElement("img", { src: slide.imgsrc, alt: slide.imgalt })
+	            _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
 	          )
 	        );
 	      });
+	      if (this.props.arrows) {
+	        var nextArrow = _react2.default.createElement(
+	          "button",
+	          { className: "arrow next", onClick: this.onClickNext.bind(this) },
+	          "Next"
+	        );
+	        var prevArrow = _react2.default.createElement(
+	          "button",
+	          { className: "arrow prev", onClick: this.onClickPrev.bind(this) },
+	          "Prev"
+	        );
+	      }
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "scarousel" },
-	        slides
+	        _react2.default.createElement(
+	          "div",
+	          { className: "scarousel-slides" },
+	          slides
+	        ),
+	        nextArrow,
+	        prevArrow
 	      );
 	    }
 	  }]);
@@ -18741,13 +18816,75 @@
 	}(_react.Component);
 
 	ReactSCarousel.propTypes = {
-	  slides: _react2.default.PropTypes.array
+	  slides: _react2.default.PropTypes.array,
+	  arrows: _react2.default.PropTypes.bool,
+	  initialSlide: _react2.default.PropTypes.number,
+	  autoPlay: _react2.default.PropTypes.bool,
+	  autoPlayInterval: _react2.default.PropTypes.number
 	};
 	ReactSCarousel.defaultProps = {
-	  slides: []
+	  slides: [],
+	  arrows: true,
+	  initialSlide: 0,
+	  autoPlay: true,
+	  autoPlayInterval: 3000
 	};
 
 	exports.default = ReactSCarousel;
+
+/***/ },
+/* 149 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);

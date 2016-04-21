@@ -12,5 +12,17 @@ html
 body
   height 100%
   background-color transparent
-img
-  vertical-align bottom
+
+.scarousel
+  img
+    vertical-align bottom
+  .slide
+    float left
+    width 800px
+
+    box-sizing border-box
+    &.active
+      border 1px solid red
+
+.scarousel-slides
+  clearfix()
