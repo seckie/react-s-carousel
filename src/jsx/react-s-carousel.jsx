@@ -1,7 +1,8 @@
 "use strict";
 
 import React, { Component } from "react";
-import classnames from "classnames";
+import ReactDOM from "react-dom";
+import Slides from "./Slides.jsx";
 
 var timer;
 
@@ -14,8 +15,12 @@ class ReactSCarousel extends Component {
     };
   }
   componentDidMount () {
+    var el = ReactDOM.findDOMNode(this);
+    this.setState({
+      width: el.clientWidth
+    });
     if (this.state.playing) {
-      this._tick();
+      setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
     }
   }
 
@@ -45,18 +50,6 @@ class ReactSCarousel extends Component {
     this._updateIndex(-1);
   }
   render () {
-    var slides = this.props.slides.map((slide, i) => {
-      var cName = classnames("slide", {
-        active: this.state.index === i
-      });
-      return (
-        <div className={cName}>
-        <a href={slide.href}>
-        <img src={slide.imgSrc} alt={slide.imgAlt} />
-        </a>
-        </div>
-      );
-    });
     if (this.props.arrows) {
       var nextArrow = (
         <button className="arrow next" onClick={this.onClickNext.bind(this)}>
@@ -67,11 +60,20 @@ class ReactSCarousel extends Component {
           Prev</button>
       );
     }
+
+    var width = this.state.width || this.props.width;
+    var style = {
+      width: width || "100%",
+      overflow: "hidden"
+    };
+    var slidesProps = {
+      slides: this.props.slides,
+      width: width,
+      index: this.state.index
+    };
     return (
-      <div className="scarousel">
-        <div className="scarousel-slides">
-        {slides}
-        </div>
+      <div className="scarousel" style={style}>
+        <Slides {...slidesProps} />
         {nextArrow}
         {prevArrow}
       </div>
@@ -85,6 +87,7 @@ ReactSCarousel.propTypes = {
   initialSlide: React.PropTypes.number,
   autoPlay: React.PropTypes.bool,
   autoPlayInterval: React.PropTypes.number,
+  width: React.PropTypes.number,
 };
 ReactSCarousel.defaultProps = {
   slides: [],
@@ -92,6 +95,7 @@ ReactSCarousel.defaultProps = {
   initialSlide: 0,
   autoPlay: true,
   autoPlayInterval: 3000,
+  width: 0,
 };
 
 export default ReactSCarousel;

@@ -18698,9 +18698,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classnames = __webpack_require__(149);
+	var _reactDom = __webpack_require__(2);
 
-	var _classnames2 = _interopRequireDefault(_classnames);
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _Slides = __webpack_require__(149);
+
+	var _Slides2 = _interopRequireDefault(_Slides);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18730,8 +18734,12 @@
 	  _createClass(ReactSCarousel, [{
 	    key: "componentDidMount",
 	    value: function componentDidMount() {
+	      var el = _reactDom2.default.findDOMNode(this);
+	      this.setState({
+	        width: el.clientWidth
+	      });
 	      if (this.state.playing) {
-	        this._tick();
+	        setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
 	      }
 	    }
 	  }, {
@@ -18770,22 +18778,6 @@
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var _this2 = this;
-
-	      var slides = this.props.slides.map(function (slide, i) {
-	        var cName = (0, _classnames2.default)("slide", {
-	          active: _this2.state.index === i
-	        });
-	        return _react2.default.createElement(
-	          "div",
-	          { className: cName },
-	          _react2.default.createElement(
-	            "a",
-	            { href: slide.href },
-	            _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
-	          )
-	        );
-	      });
 	      if (this.props.arrows) {
 	        var nextArrow = _react2.default.createElement(
 	          "button",
@@ -18798,14 +18790,21 @@
 	          "Prev"
 	        );
 	      }
+
+	      var width = this.state.width || this.props.width;
+	      var style = {
+	        width: width || "100%",
+	        overflow: "hidden"
+	      };
+	      var slidesProps = {
+	        slides: this.props.slides,
+	        width: width,
+	        index: this.state.index
+	      };
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "scarousel" },
-	        _react2.default.createElement(
-	          "div",
-	          { className: "scarousel-slides" },
-	          slides
-	        ),
+	        { className: "scarousel", style: style },
+	        _react2.default.createElement(_Slides2.default, slidesProps),
 	        nextArrow,
 	        prevArrow
 	      );
@@ -18820,20 +18819,110 @@
 	  arrows: _react2.default.PropTypes.bool,
 	  initialSlide: _react2.default.PropTypes.number,
 	  autoPlay: _react2.default.PropTypes.bool,
-	  autoPlayInterval: _react2.default.PropTypes.number
+	  autoPlayInterval: _react2.default.PropTypes.number,
+	  width: _react2.default.PropTypes.number
 	};
 	ReactSCarousel.defaultProps = {
 	  slides: [],
 	  arrows: true,
 	  initialSlide: 0,
 	  autoPlay: true,
-	  autoPlayInterval: 3000
+	  autoPlayInterval: 3000,
+	  width: 0
 	};
 
 	exports.default = ReactSCarousel;
 
 /***/ },
 /* 149 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(150);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Slides = function (_Component) {
+	  _inherits(Slides, _Component);
+
+	  function Slides(props) {
+	    _classCallCheck(this, Slides);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Slides).call(this, props));
+	  }
+
+	  _createClass(Slides, [{
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+
+	      var slides = this.props.slides.map(function (slide, i) {
+	        var cName = (0, _classnames2.default)("slide", {
+	          active: _this2.props.index === i
+	        });
+	        var style = {
+	          width: _this2.props.width,
+	          float: "left"
+	        };
+	        return _react2.default.createElement(
+	          "div",
+	          { key: "slide" + i, className: cName, style: style },
+	          _react2.default.createElement(
+	            "a",
+	            { href: slide.href },
+	            _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
+	          )
+	        );
+	      });
+	      var slidesStyle = {
+	        width: this.props.width * this.props.slides.length,
+	        transform: "translateX(" + -this.props.width * this.props.index + "px)"
+	      };
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "scarousel-slides", style: slidesStyle },
+	        slides
+	      );
+	    }
+	  }]);
+
+	  return Slides;
+	}(_react.Component);
+
+	Slides.propTypes = {
+	  slides: _react2.default.PropTypes.array,
+	  width: _react2.default.PropTypes.number,
+	  index: _react2.default.PropTypes.number
+	};
+	Slides.defaultProps = {
+	  slides: [],
+	  width: 0,
+	  index: 0
+	};
+
+	exports.default = Slides;
+
+/***/ },
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
