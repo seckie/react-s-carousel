@@ -2,6 +2,7 @@
 
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import _ from "lodash";
 import Slides from "./Slides.jsx";
 
 var timer;
@@ -10,8 +11,9 @@ class ReactSCarousel extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      index: props.initialSlide,
+      index: props.initialSlide + 1, // +1 looking cloned slide
       playing: props.autoPlay,
+      enableTransition: true
     };
   }
   componentDidMount () {
@@ -35,7 +37,7 @@ class ReactSCarousel extends Component {
   _updateIndex (tick) {
     var index = this.state.index + tick;
     var min = 0;
-    var max = this.props.slides.length - 1;
+    var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
     if (index < min) {
       index = max;
     } else if (max < index) {
@@ -48,6 +50,30 @@ class ReactSCarousel extends Component {
   }
   onClickPrev () {
     this._updateIndex(-1);
+  }
+  loop () {
+    this.setState({
+      enableTransition: true
+    });
+  }
+  onTransitionEnd () {
+    var min = 0;
+    var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+    if (this.state.index <= min) {
+      this.setState({
+        index: max - 1,
+        enableTransition: false
+      });
+    } else if (max <= this.state.index) {
+      this.setState({
+        index: min + 1,
+        enableTransition: false
+      });
+    } else {
+      this.setState({
+        enableTransition: true
+      });
+    }
   }
   render () {
     if (this.props.arrows) {
@@ -66,12 +92,18 @@ class ReactSCarousel extends Component {
       width: width || "100%",
       overflow: "hidden"
     };
+    var firstSlide = this.props.slides[0];
+    var lastSlide = this.props.slides[this.props.slides.length - 1];
+    var slides = [].concat(lastSlide, this.props.slides, firstSlide);
     var slidesProps = {
-      slides: this.props.slides,
+      slides: slides,
       width: width,
       index: this.state.index,
       duration: this.props.duration,
       cssEase: this.props.cssEase,
+      loop: this.loop.bind(this),
+      onTransitionEnd: this.onTransitionEnd.bind(this),
+      enableTransition: this.state.enableTransition,
     };
     return (
       <div className="scarousel" style={style}>
@@ -98,7 +130,7 @@ ReactSCarousel.defaultProps = {
   arrows: true,
   initialSlide: 0,
   autoPlay: true,
-  autoPlayInterval: 3000,
+  autoPlayInterval: 1000,
   width: 0,
   duration: 500,
   cssEase: "ease-in-out",
