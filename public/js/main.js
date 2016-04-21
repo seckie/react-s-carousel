@@ -19422,7 +19422,7 @@
 	        width: el.clientWidth
 	      });
 	      if (this.state.playing) {
-	        setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
 	      }
 	    }
 	  }, {
@@ -19433,7 +19433,7 @@
 	        return;
 	      }
 	      this._updateIndex(1);
-	      setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
 	    }
 	  }, {
 	    key: "_updateIndex",
@@ -19449,14 +19449,28 @@
 	      this.setState({ index: index });
 	    }
 	  }, {
+	    key: "_updateStateOnClick",
+	    value: function _updateStateOnClick() {
+	      this.setState({
+	        playing: false,
+	        enableClick: false
+	      });
+	    }
+	  }, {
 	    key: "onClickNext",
 	    value: function onClickNext() {
-	      this._updateIndex(1);
+	      if (this.state.enableClick) {
+	        this._updateIndex(1);
+	        this._updateStateOnClick();
+	      }
 	    }
 	  }, {
 	    key: "onClickPrev",
 	    value: function onClickPrev() {
-	      this._updateIndex(-1);
+	      if (this.state.enableClick) {
+	        this._updateIndex(-1);
+	        this._updateStateOnClick();
+	      }
 	    }
 	  }, {
 	    key: "loop",
@@ -19468,23 +19482,26 @@
 	  }, {
 	    key: "onTransitionEnd",
 	    value: function onTransitionEnd() {
+	      var state = {
+	        enableClick: true,
+	        playing: true
+	      };
 	      var min = 0;
 	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
 	      if (this.state.index <= min) {
-	        this.setState({
-	          index: max - 1,
-	          enableTransition: false
-	        });
+	        state.index = max - 1;
+	        state.enableTransition = false;
 	      } else if (max <= this.state.index) {
-	        this.setState({
-	          index: min + 1,
-	          enableTransition: false
-	        });
+	        state.index = min + 1;
+	        state.enableTransition = false;
 	      } else {
-	        this.setState({
-	          enableTransition: true
-	        });
+	        state.enableTransition = true;
 	      }
+	      if (!this.state.playing) {
+	        clearTimeout(timer);
+	        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	      }
+	      this.setState(state);
 	    }
 	  }, {
 	    key: "render",
@@ -19548,7 +19565,7 @@
 	  arrows: true,
 	  initialSlide: 0,
 	  autoPlay: true,
-	  autoPlayInterval: 1000,
+	  autoPlayInterval: 3000,
 	  width: 0,
 	  duration: 500,
 	  cssEase: "ease-in-out"

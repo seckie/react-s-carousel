@@ -133,20 +133,14 @@ body {
 .scarousel img {
   vertical-align: bottom;
 }
-.scarousel .slide {
-  float: left;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-.scarousel .slide .scarousel-slides {
+.scarousel-slides {
   zoom: 1;
 }
-.scarousel .slide .scarousel-slides:before,
-.scarousel .slide .scarousel-slides:after {
+.scarousel-slides:before,
+.scarousel-slides:after {
   content: "";
   display: table;
 }
-.scarousel .slide .scarousel-slides:after {
+.scarousel-slides:after {
   clear: both;
 }

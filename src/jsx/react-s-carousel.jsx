@@ -22,7 +22,7 @@ class ReactSCarousel extends Component {
       width: el.clientWidth
     });
     if (this.state.playing) {
-      setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
     }
   }
 
@@ -32,7 +32,7 @@ class ReactSCarousel extends Component {
       return;
     }
     this._updateIndex(1);
-    setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+    timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
   }
   _updateIndex (tick) {
     var index = this.state.index + tick;
@@ -45,11 +45,23 @@ class ReactSCarousel extends Component {
     }
     this.setState({ index: index });
   }
+  _updateStateOnClick () {
+    this.setState({
+      playing: false,
+      enableClick: false
+    });
+  }
   onClickNext () {
-    this._updateIndex(1);
+    if (this.state.enableClick) {
+      this._updateIndex(1);
+      this._updateStateOnClick();
+    }
   }
   onClickPrev () {
-    this._updateIndex(-1);
+    if (this.state.enableClick) {
+      this._updateIndex(-1);
+      this._updateStateOnClick();
+    }
   }
   loop () {
     this.setState({
@@ -57,23 +69,26 @@ class ReactSCarousel extends Component {
     });
   }
   onTransitionEnd () {
+    var state = {
+      enableClick: true,
+      playing: true
+    };
     var min = 0;
     var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
     if (this.state.index <= min) {
-      this.setState({
-        index: max - 1,
-        enableTransition: false
-      });
+      state.index = max - 1;
+      state.enableTransition = false;
     } else if (max <= this.state.index) {
-      this.setState({
-        index: min + 1,
-        enableTransition: false
-      });
+      state.index = min + 1;
+      state.enableTransition = false;
     } else {
-      this.setState({
-        enableTransition: true
-      });
+      state.enableTransition = true;
     }
+    if (!this.state.playing) {
+      clearTimeout(timer);
+      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+    }
+    this.setState(state);
   }
   render () {
     if (this.props.arrows) {
@@ -130,7 +145,7 @@ ReactSCarousel.defaultProps = {
   arrows: true,
   initialSlide: 0,
   autoPlay: true,
-  autoPlayInterval: 1000,
+  autoPlayInterval: 3000,
   width: 0,
   duration: 500,
   cssEase: "ease-in-out",
