@@ -2,12 +2,15 @@
 var gulp = require("gulp");
 var stylus = require("gulp-stylus");
 var webpack = require("gulp-webpack");
+var webpackConfig = require("./webpack.config.js");
 var nib = require("nib");
 var browserSync = require("browser-sync");
 var notify = require("gulp-notify");
 var rename = require("gulp-rename");
+var _ = require("lodash");
 
 var PUBLIC_PATH = "./public/";
+var DIST_FILENAME = "react-s-carousel.js";
 var PATHS = {
   htmlDir: PUBLIC_PATH,
 
@@ -16,6 +19,8 @@ var PATHS = {
   js: [ PUBLIC_PATH + "js/**/*.js" ],
   jsDir: PUBLIC_PATH + "js",
   jsMain: PUBLIC_PATH + "js/main.js",
+
+  distDir: "./dist",
 
   stylus: [ "src/stylus/**/*.styl" ],
   stylusEntry: [ "src/stylus/**/!(_)*.styl" ],
@@ -42,25 +47,21 @@ gulp.task("stylus", function () {
 });
 
 gulp.task("build", function () {
+  var config = _.assign({}, webpackConfig);
+  config.output.filename = "main.js";
+  config.externals = {};
   return gulp.src(PATHS.jsxMain)
-    .pipe(webpack({
-      output: { filename: "[name].js" },
-      module: {
-        loaders: [
-          { test: /\.jsx$/, exclude: /node_modules/, loader: "babel" }
-        ],
-        resolve: {
-          extensions: [ "", ".js", ".jsx" ]
-        }
-      },
-      externals: {
-        "react": "React",
-        "react/addons": "React",
-        "immutable": "Immutable",
-      }
-    }))
+    .pipe(webpack(config))
     .on("error", errorHandler)
     .pipe(gulp.dest(PATHS.jsDir))
+    .pipe(browserSync.stream());
+});
+
+gulp.task("dist", function () {
+  return gulp.src(PATHS.jsxMain)
+    .pipe(webpack(webpackConfig))
+    .on("error", errorHandler)
+    .pipe(gulp.dest(PATHS.distDir))
     .pipe(browserSync.stream());
 });
 
