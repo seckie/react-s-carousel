@@ -23,8 +23,9 @@ class Slides extends Component {
         float: "left"
       };
       return (
-        <div key={`slide${i}`} className={cName} style={style}>
-        {slide}
+        <div key={`slide${i}`} className={cName}
+          style={style} onClick={this.props.onClickSlide}>
+          {slide}
         </div>
       );
     });
@@ -50,6 +51,7 @@ Slides.propTypes = {
   duration       : React.PropTypes.number,
   cssEase        : React.PropTypes.string,
   loop           : React.PropTypes.func,
+  onClickSlide   : React.PropTypes.func,
   onTransitionEnd: React.PropTypes.func,
 };
 Slides.defaultProps = {
@@ -59,6 +61,7 @@ Slides.defaultProps = {
   duration       : 500,
   cssEase        : "ease-in-out",
   loop           : function () {},
+  onClickSlide   : function () {},
   onTransitionEnd: function () {},
 };
 

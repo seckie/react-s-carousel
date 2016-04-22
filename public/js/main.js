@@ -20233,6 +20233,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: "onClickSlide",
+	    value: function onClickSlide(e) {
+	      if (this.props.pauseOnAction) {
+	        this.setState({ playing: false });
+	      }
+	    }
+	  }, {
 	    key: "loop",
 	    value: function loop() {
 	      this.setState({
@@ -20287,6 +20294,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        duration: this.props.duration,
 	        cssEase: this.props.cssEase,
 	        loop: this.loop.bind(this),
+	        onClickSlide: this.onClickSlide.bind(this),
 	        onTransitionEnd: this.onTransitionEnd.bind(this),
 	        enableTransition: this.state.enableTransition
 	      };
@@ -36534,7 +36542,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	        return _react2.default.createElement(
 	          "div",
-	          { key: "slide" + i, className: cName, style: style },
+	          { key: "slide" + i, className: cName,
+	            style: style, onClick: _this2.props.onClickSlide },
 	          slide
 	        );
 	      });
@@ -36563,6 +36572,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  duration: _react2.default.PropTypes.number,
 	  cssEase: _react2.default.PropTypes.string,
 	  loop: _react2.default.PropTypes.func,
+	  onClickSlide: _react2.default.PropTypes.func,
 	  onTransitionEnd: _react2.default.PropTypes.func
 	};
 	Slides.defaultProps = {
@@ -36572,6 +36582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  duration: 500,
 	  cssEase: "ease-in-out",
 	  loop: function loop() {},
+	  onClickSlide: function onClickSlide() {},
 	  onTransitionEnd: function onTransitionEnd() {}
 	};
 

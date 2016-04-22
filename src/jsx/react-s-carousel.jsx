@@ -87,6 +87,11 @@ class ReactSCarousel extends Component {
       }
     }
   }
+  onClickSlide (e) {
+    if (this.props.pauseOnAction) {
+      this.setState({ playing: false });
+    }
+  }
   loop () {
     this.setState({
       enableTransition: true
@@ -134,8 +139,9 @@ class ReactSCarousel extends Component {
       duration: this.props.duration,
       cssEase: this.props.cssEase,
       loop: this.loop.bind(this),
+      onClickSlide: this.onClickSlide.bind(this),
       onTransitionEnd: this.onTransitionEnd.bind(this),
-      enableTransition: this.state.enableTransition,
+      enableTransition: this.state.enableTransition
     };
 
     if (this.props.dots) {
