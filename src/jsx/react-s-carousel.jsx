@@ -6,13 +6,13 @@ import _ from "lodash";
 import classnames from "classnames";
 import Slides from "./Slides.jsx";
 
-var timer;
 var prefix = "scarousel";
 
 class ReactSCarousel extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      timer: 0,
       index: props.initialSlide + 1, // +1 looking cloned slide
       playing: props.autoPlay,
       enableTransition: true
@@ -24,7 +24,9 @@ class ReactSCarousel extends Component {
       width: el.clientWidth
     });
     if (this.state.playing) {
-      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+      this.setState({
+        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+      });
     }
   }
   componentWillUpdate (nextProps) {
@@ -33,20 +35,24 @@ class ReactSCarousel extends Component {
         playing: nextProps.autoPlay
       });
       if (nextProps.autoPlay) {
-        clearTimeout(timer);
-        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+        clearTimeout(this.state.timer);
+        this.setState({
+          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+        });
       }
     }
   }
 
   _tick () {
     if (!this.state.playing) {
-      clearTimeout(timer);
+      clearTimeout(this.state.timer);
       return;
     }
     var index = this.state.index + 1;
     this._updateIndex(index);
-    timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+    this.setState({
+      timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+    });
   }
   _updateIndex (index) {
     var min = 0;
@@ -114,11 +120,13 @@ class ReactSCarousel extends Component {
       state.enableTransition = true;
     }
     if (!this.state.playing) {
-      clearTimeout(timer);
+      clearTimeout(this.state.timer);
       var isAfterClick = this.state.enableClick === false;
       var shouldBePause = isAfterClick && this.props.pauseOnAction;
       if (this.props.autoPlay && !shouldBePause) {
-        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+        this.setState({
+          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+        });
       }
     }
     this.setState(state);

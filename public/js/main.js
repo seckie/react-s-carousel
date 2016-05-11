@@ -66,9 +66,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactSCarousel = __webpack_require__(166);
+	var _wrapper = __webpack_require__(166);
 
-	var _reactSCarousel2 = _interopRequireDefault(_reactSCarousel);
+	var _wrapper2 = _interopRequireDefault(_wrapper);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -78,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var list = [{ href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
+	var COUNT = 3;
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -86,45 +86,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function App(props) {
 	    _classCallCheck(this, App);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
-
-	    _this.state = {
-	      autoPlay: true
-	    };
-	    return _this;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).call(this, props));
 	  }
 
 	  _createClass(App, [{
-	    key: "toggleAutoPlay",
-	    value: function toggleAutoPlay() {
-	      this.setState({
-	        autoPlay: !this.state.autoPlay
-	      });
-	    }
-	  }, {
 	    key: "render",
 	    value: function render() {
-	      var slides = list.map(function (slide, i) {
-	        return _react2.default.createElement(
-	          "a",
-	          { href: slide.href, key: "slide" + i },
-	          _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
-	        );
-	      });
-	      var props = {
-	        slides: slides,
-	        autoPlay: this.state.autoPlay,
-	        width: 800
-	      };
+	      var carousels = [];
+	      for (var i = 0; i < COUNT; i++) {
+	        carousels.push(_react2.default.createElement(_wrapper2.default, { key: "item" + i }));
+	      }
 	      return _react2.default.createElement(
 	        "div",
 	        null,
-	        _react2.default.createElement(_reactSCarousel2.default, props),
-	        _react2.default.createElement(
-	          "button",
-	          { className: "toggle", onClick: this.toggleAutoPlay.bind(this) },
-	          "Toggle autoPlay"
-	        )
+	        carousels
 	      );
 	    }
 	  }]);
@@ -20109,15 +20084,103 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _lodash = __webpack_require__(167);
+	var _reactSCarousel = __webpack_require__(167);
+
+	var _reactSCarousel2 = _interopRequireDefault(_reactSCarousel);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var list = [{ href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
+
+	var Carousel = function (_Component) {
+	  _inherits(Carousel, _Component);
+
+	  function Carousel(props) {
+	    _classCallCheck(this, Carousel);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Carousel).call(this, props));
+
+	    _this.state = {
+	      autoPlay: true
+	    };
+	    return _this;
+	  }
+
+	  _createClass(Carousel, [{
+	    key: "toggleAutoPlay",
+	    value: function toggleAutoPlay() {
+	      this.setState({
+	        autoPlay: !this.state.autoPlay
+	      });
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var slides = list.map(function (slide, i) {
+	        return _react2.default.createElement(
+	          "a",
+	          { href: slide.href, key: "slide" + i },
+	          _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt })
+	        );
+	      });
+	      var props = {
+	        slides: slides,
+	        autoPlay: this.state.autoPlay,
+	        width: 800
+	      };
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(_reactSCarousel2.default, props),
+	        _react2.default.createElement(
+	          "button",
+	          { className: "toggle", onClick: this.toggleAutoPlay.bind(this) },
+	          "Toggle autoPlay"
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Carousel;
+	}(_react.Component);
+
+	exports.default = Carousel;
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(32);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _lodash = __webpack_require__(168);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(169);
+	var _classnames = __webpack_require__(170);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _Slides = __webpack_require__(170);
+	var _Slides = __webpack_require__(171);
 
 	var _Slides2 = _interopRequireDefault(_Slides);
 
@@ -20129,7 +20192,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var timer;
 	var prefix = "scarousel";
 
 	var ReactSCarousel = function (_Component) {
@@ -20141,6 +20203,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
 
 	    _this.state = {
+	      timer: 0,
 	      index: props.initialSlide + 1, // +1 looking cloned slide
 	      playing: props.autoPlay,
 	      enableTransition: true
@@ -20156,7 +20219,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        width: el.clientWidth
 	      });
 	      if (this.state.playing) {
-	        timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	        this.setState({
+	          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	        });
 	      }
 	    }
 	  }, {
@@ -20167,8 +20232,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          playing: nextProps.autoPlay
 	        });
 	        if (nextProps.autoPlay) {
-	          clearTimeout(timer);
-	          timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	          clearTimeout(this.state.timer);
+	          this.setState({
+	            timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	          });
 	        }
 	      }
 	    }
@@ -20176,12 +20243,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "_tick",
 	    value: function _tick() {
 	      if (!this.state.playing) {
-	        clearTimeout(timer);
+	        clearTimeout(this.state.timer);
 	        return;
 	      }
 	      var index = this.state.index + 1;
 	      this._updateIndex(index);
-	      timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	      this.setState({
+	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	      });
 	    }
 	  }, {
 	    key: "_updateIndex",
@@ -20265,11 +20334,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        state.enableTransition = true;
 	      }
 	      if (!this.state.playing) {
-	        clearTimeout(timer);
+	        clearTimeout(this.state.timer);
 	        var isAfterClick = this.state.enableClick === false;
 	        var shouldBePause = isAfterClick && this.props.pauseOnAction;
 	        if (this.props.autoPlay && !shouldBePause) {
-	          timer = setTimeout(this._tick.bind(this), this.props.autoPlayInterval);
+	          this.setState({
+	            timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	          });
 	        }
 	      }
 	      this.setState(state);
@@ -20376,7 +20447,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ReactSCarousel;
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -36407,10 +36478,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(168)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)(module), (function() { return this; }())))
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -36426,7 +36497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -36480,7 +36551,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36495,11 +36566,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(167);
+	var _lodash = __webpack_require__(168);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(169);
+	var _classnames = __webpack_require__(170);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
