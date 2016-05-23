@@ -4,13 +4,15 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import _ from "lodash";
 import classnames from "classnames";
-import Slides from "./Slides.jsx";
+import Slides from "./slides.jsx";
+import SlidesFadeMode from "./slides-fademode.jsx";
 
 var prefix = "scarousel";
 
 class ReactSCarousel extends Component {
   constructor (props) {
     super(props);
+    console.log('props:', props);
     this.state = {
       timer: 0,
       index: props.initialSlide + 1, // +1 looking cloned slide
@@ -49,6 +51,11 @@ class ReactSCarousel extends Component {
       return;
     }
     var index = this.state.index + 1;
+    var min = 0;
+    var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+    if (this.props.mode === "fade" && index >= max) {
+      index = min + 1;
+    }
     this._updateIndex(index);
     this.setState({
       timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
@@ -141,15 +148,16 @@ class ReactSCarousel extends Component {
     var lastSlide = this.props.slides[this.props.slides.length - 1];
     var slides = [].concat(lastSlide, this.props.slides, firstSlide);
     var slidesProps = {
-      slides: slides,
-      width: width,
-      index: this.state.index,
-      duration: this.props.duration,
-      cssEase: this.props.cssEase,
-      loop: this.loop.bind(this),
-      onClickSlide: this.onClickSlide.bind(this),
-      onTransitionEnd: this.onTransitionEnd.bind(this),
-      enableTransition: this.state.enableTransition
+      slides          : slides,
+      width           : width,
+      index           : this.state.index,
+      duration        : this.props.duration,
+      cssEase         : this.props.cssEase,
+      loop            : this.loop.bind(this),
+      onClickSlide    : this.onClickSlide.bind(this),
+      onTransitionEnd : this.onTransitionEnd.bind(this),
+      enableTransition: this.state.enableTransition,
+      mode            : this.props.mode
     };
 
     if (this.props.dots) {
@@ -179,9 +187,14 @@ class ReactSCarousel extends Component {
           Next</button>
       );
     }
+    var slidesComponent = this.props.mode === "fade" ? (
+      <SlidesFadeMode {...slidesProps} />
+    ) : (
+      <Slides {...slidesProps} />
+    );
     return (
       <div className="scarousel" style={style}>
-        <Slides {...slidesProps} />
+        {slidesComponent}
         {prevArrow}
         {nextArrow}
         <div className={`${prefix}-dots`}>
@@ -203,6 +216,8 @@ ReactSCarousel.propTypes = {
   pauseOnAction   : React.PropTypes.bool,
   slides          : React.PropTypes.array,
   width           : React.PropTypes.number,
+  mode            : React.PropTypes.string,
+  backgroundColor: React.PropTypes.string
 };
 ReactSCarousel.defaultProps = {
   arrows          : true,
@@ -215,6 +230,8 @@ ReactSCarousel.defaultProps = {
   pauseOnAction   : true,
   slides          : [],
   width           : 0,
+  mode            : "slide",
+  backgroundColor : "white"
 };
 
 export default ReactSCarousel;

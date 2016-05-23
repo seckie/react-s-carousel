@@ -14,13 +14,26 @@ class Slides extends Component {
     }
   }
   render () {
+    console.log('this.props.index:', this.props.index);
+    var count = this.props.slides.length;
+    var transition = this.props.enableTransition ? `opacity ${this.props.duration}ms ${this.props.cssEase}` : "none";
     var slides = this.props.slides.map((slide, i) => {
+      var isPrev = this.props.index - 1 === i;
+      var isActive = this.props.index === i;
+      var isNext = this.props.index === i - 1 || (0 === i && this.props.index >= count - 1);
       var cName = classnames("slide", {
-        active: this.props.index === i
+        prev: isPrev,
+        active: isActive,
+        next: isNext
       });
       var style = {
         width: this.props.width,
-        cssFloat: "left"
+        position: "absolute",
+        top: 0,
+        left: 0,
+        zIndex: count - i,
+        opacity: isActive ? 1 : 0,
+        transition: transition
       };
       return (
         <div key={`slide${i}`} className={cName}
@@ -29,15 +42,12 @@ class Slides extends Component {
         </div>
       );
     });
-    var transition = this.props.enableTransition ? `transform ${this.props.duration}ms ${this.props.cssEase}` : "none";
     var slidesStyle = {
       width: this.props.width * this.props.slides.length,
-      transform: `translateX(${-this.props.width * this.props.index}px)`,
-      transition: transition
+      backgroundColor: this.props.backgroundColor
     };
     return (
-      <div className="scarousel-slides" style={slidesStyle}
-        onTransitionEnd={this.props.onTransitionEnd}>
+      <div className="scarousel-slides" style={slidesStyle}>
         {slides}
       </div>
     );
@@ -53,6 +63,8 @@ Slides.propTypes = {
   loop           : React.PropTypes.func,
   onClickSlide   : React.PropTypes.func,
   onTransitionEnd: React.PropTypes.func,
+  mode           : React.PropTypes.string,
+  backgroundColor: React.PropTypes.string
 };
 Slides.defaultProps = {
   slides         : [],
@@ -63,6 +75,8 @@ Slides.defaultProps = {
   loop           : function () {},
   onClickSlide   : function () {},
   onTransitionEnd: function () {},
+  mode           : "slide",
+  backgroundColor: "white"
 };
 
 

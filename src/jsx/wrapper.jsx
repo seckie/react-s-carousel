@@ -33,7 +33,8 @@ class Carousel extends Component {
     var props = {
       slides: slides,
       autoPlay: this.state.autoPlay,
-      width: 800
+      width: 800,
+      mode: this.props.mode
     };
     return (
       <div>
