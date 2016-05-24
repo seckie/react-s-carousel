@@ -14,7 +14,6 @@ class Slides extends Component {
     }
   }
   render () {
-    console.log('this.props.index:', this.props.index);
     var count = this.props.slides.length;
     var transition = this.props.enableTransition ? `opacity ${this.props.duration}ms ${this.props.cssEase}` : "none";
     var slides = this.props.slides.map((slide, i) => {

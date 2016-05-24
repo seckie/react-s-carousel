@@ -20216,7 +20216,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
 
-	    console.log('props:', props);
 	    _this.state = {
 	      timer: 0,
 	      index: props.initialSlide + 1, // +1 looking cloned slide
@@ -36746,7 +36745,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _this2 = this;
 
-	      console.log('this.props.index:', this.props.index);
 	      var count = this.props.slides.length;
 	      var transition = this.props.enableTransition ? "opacity " + this.props.duration + "ms " + this.props.cssEase : "none";
 	      var slides = this.props.slides.map(function (slide, i) {

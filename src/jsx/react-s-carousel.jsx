@@ -12,7 +12,6 @@ var prefix = "scarousel";
 class ReactSCarousel extends Component {
   constructor (props) {
     super(props);
-    console.log('props:', props);
     this.state = {
       timer: 0,
       index: props.initialSlide + 1, // +1 looking cloned slide
