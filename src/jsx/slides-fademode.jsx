@@ -28,6 +28,7 @@ class Slides extends Component {
       });
       var style = {
         width: this.props.width,
+        height: this.props.height,
         position: "absolute",
         top: 0,
         left: 0,
@@ -43,6 +44,9 @@ class Slides extends Component {
       );
     });
     var slidesStyle = {
+      position: "absolute",
+      top: 0,
+      left: 0,
       width: this.props.width * this.props.slides.length,
       backgroundColor: this.props.backgroundColor
     };
@@ -56,7 +60,14 @@ class Slides extends Component {
 
 Slides.propTypes = {
   slides         : React.PropTypes.array,
-  width          : React.PropTypes.number,
+  width          : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
+  height         : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
   index          : React.PropTypes.number,
   duration       : React.PropTypes.number,
   cssEase        : React.PropTypes.string,
@@ -64,11 +75,12 @@ Slides.propTypes = {
   onClickSlide   : React.PropTypes.func,
   onTransitionEnd: React.PropTypes.func,
   mode           : React.PropTypes.string,
-  backgroundColor: React.PropTypes.string
+  backgroundColor: React.PropTypes.string,
 };
 Slides.defaultProps = {
   slides         : [],
-  width          : 0,
+  width          : "auto",
+  height         : "auto",
   index          : 0,
   duration       : 500,
   cssEase        : "ease-in-out",

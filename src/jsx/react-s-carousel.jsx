@@ -26,9 +26,7 @@ class ReactSCarousel extends Component {
       width: el.clientWidth
     });
     if (this.state.playing) {
-      this.setState({
-        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-      });
+      this._setTimer();
     }
   }
   componentWillUpdate (nextProps) {
@@ -38,13 +36,10 @@ class ReactSCarousel extends Component {
       });
       if (nextProps.autoPlay) {
         clearTimeout(this.state.timer);
-        this.setState({
-          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-        });
+        this._setTimer();
       }
     }
   }
-
   _tick () {
     if (!this.state.playing) {
       clearTimeout(this.state.timer);
@@ -57,6 +52,9 @@ class ReactSCarousel extends Component {
       index = min + 1;
     }
     this._updateIndex(index);
+    this._setTimer();
+  }
+  _setTimer () {
     this.setState({
       timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
     });
@@ -142,6 +140,7 @@ class ReactSCarousel extends Component {
     var width = this.state.width || this.props.width;
     var style = {
       width: width || "100%",
+      position: "relative",
       overflow: "hidden"
     };
     var firstSlide = this.props.slides[0];
@@ -192,9 +191,13 @@ class ReactSCarousel extends Component {
     ) : (
       <Slides {...slidesProps} />
     );
+    var dummySlide = this.props.mode === "fade" ? (
+      <div style={{ visibility: "hidden", zIndex: -1 }}>{slides[0]}</div>
+    ) : "";
     return (
       <div className="scarousel" style={style}>
         {slidesComponent}
+        {dummySlide}
         {prevArrow}
         {nextArrow}
         <div className={`${prefix}-dots`}>
@@ -215,7 +218,10 @@ ReactSCarousel.propTypes = {
   initialSlide    : React.PropTypes.number,
   pauseOnAction   : React.PropTypes.bool,
   slides          : React.PropTypes.array,
-  width           : React.PropTypes.number,
+  width          : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
   mode            : React.PropTypes.string,
   backgroundColor: React.PropTypes.string
 };
@@ -229,7 +235,7 @@ ReactSCarousel.defaultProps = {
   initialSlide    : 0,
   pauseOnAction   : true,
   slides          : [],
-  width           : 0,
+  width           : "auto",
   mode            : "slide",
   backgroundColor : "white"
 };

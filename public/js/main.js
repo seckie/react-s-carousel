@@ -90,10 +90,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(App, [{
 	    key: "render",
 	    value: function render() {
+	      var hStyle = {
+	        fontSize: 20,
+	        margin: "20px"
+	      };
 	      return _react2.default.createElement(
 	        "div",
-	        null,
-	        _react2.default.createElement(_wrapper2.default, { mode: "fade" })
+	        { style: { position: "relative" } },
+	        _react2.default.createElement(
+	          "h2",
+	          { style: hStyle },
+	          " mode=\"fade\""
+	        ),
+	        _react2.default.createElement(_wrapper2.default, { mode: "fade" }),
+	        _react2.default.createElement(
+	          "h2",
+	          { style: hStyle },
+	          " mode=\"slide\""
+	        ),
+	        _react2.default.createElement(_wrapper2.default, { mode: "slide" })
 	      );
 	    }
 	  }]);
@@ -20219,9 +20234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        width: el.clientWidth
 	      });
 	      if (this.state.playing) {
-	        this.setState({
-	          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-	        });
+	        this._setTimer();
 	      }
 	    }
 	  }, {
@@ -20233,9 +20246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        if (nextProps.autoPlay) {
 	          clearTimeout(this.state.timer);
-	          this.setState({
-	            timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-	          });
+	          this._setTimer();
 	        }
 	      }
 	    }
@@ -20253,6 +20264,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        index = min + 1;
 	      }
 	      this._updateIndex(index);
+	      this._setTimer();
+	    }
+	  }, {
+	    key: "_setTimer",
+	    value: function _setTimer() {
 	      this.setState({
 	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
 	      });
@@ -20358,6 +20374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var width = this.state.width || this.props.width;
 	      var style = {
 	        width: width || "100%",
+	        position: "relative",
 	        overflow: "hidden"
 	      };
 	      var firstSlide = this.props.slides[0];
@@ -20408,10 +20425,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        );
 	      }
 	      var slidesComponent = this.props.mode === "fade" ? _react2.default.createElement(_slidesFademode2.default, slidesProps) : _react2.default.createElement(_slides2.default, slidesProps);
+	      var dummySlide = this.props.mode === "fade" ? _react2.default.createElement(
+	        "div",
+	        { style: { visibility: "hidden", zIndex: -1 } },
+	        slides[0]
+	      ) : "";
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "scarousel", style: style },
 	        slidesComponent,
+	        dummySlide,
 	        prevArrow,
 	        nextArrow,
 	        _react2.default.createElement(
@@ -20436,7 +20459,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  initialSlide: _react2.default.PropTypes.number,
 	  pauseOnAction: _react2.default.PropTypes.bool,
 	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.number,
+	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
 	  mode: _react2.default.PropTypes.string,
 	  backgroundColor: _react2.default.PropTypes.string
 	};
@@ -20450,7 +20473,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  initialSlide: 0,
 	  pauseOnAction: true,
 	  slides: [],
-	  width: 0,
+	  width: "auto",
 	  mode: "slide",
 	  backgroundColor: "white"
 	};
@@ -36737,6 +36760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        var style = {
 	          width: _this2.props.width,
+	          height: _this2.props.height,
 	          position: "absolute",
 	          top: 0,
 	          left: 0,
@@ -36752,6 +36776,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        );
 	      });
 	      var slidesStyle = {
+	        position: "absolute",
+	        top: 0,
+	        left: 0,
 	        width: this.props.width * this.props.slides.length,
 	        backgroundColor: this.props.backgroundColor
 	      };
@@ -36768,7 +36795,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Slides.propTypes = {
 	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.number,
+	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
+	  height: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
 	  index: _react2.default.PropTypes.number,
 	  duration: _react2.default.PropTypes.number,
 	  cssEase: _react2.default.PropTypes.string,
@@ -36780,7 +36808,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	Slides.defaultProps = {
 	  slides: [],
-	  width: 0,
+	  width: "auto",
+	  height: "auto",
 	  index: 0,
 	  duration: 500,
 	  cssEase: "ease-in-out",

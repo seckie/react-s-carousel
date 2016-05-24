@@ -10,9 +10,16 @@ class App extends Component {
     super(props);
   }
   render () {
+    var hStyle = {
+      fontSize: 20,
+      margin: "20px",
+    };
     return (
-      <div>
+      <div style={{ position: "relative" }}>
+        <h2 style={hStyle}> mode="fade"</h2>
         <Carousel mode="fade" />
+        <h2 style={hStyle}> mode="slide"</h2>
+        <Carousel mode="slide" />
       </div>
     );
   }
