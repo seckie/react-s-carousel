@@ -78,8 +78,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var COUNT = 3;
-
 	var App = function (_Component) {
 	  _inherits(App, _Component);
 
@@ -92,14 +90,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(App, [{
 	    key: "render",
 	    value: function render() {
-	      var carousels = [];
-	      for (var i = 0; i < COUNT; i++) {
-	        carousels.push(_react2.default.createElement(_wrapper2.default, { key: "item" + i }));
-	      }
+	      var hStyle = {
+	        fontSize: 20,
+	        margin: "20px"
+	      };
 	      return _react2.default.createElement(
 	        "div",
-	        null,
-	        carousels
+	        { style: { position: "relative" } },
+	        _react2.default.createElement(
+	          "h2",
+	          { style: hStyle },
+	          " mode=\"fade\""
+	        ),
+	        _react2.default.createElement(_wrapper2.default, { mode: "fade" }),
+	        _react2.default.createElement(
+	          "h2",
+	          { style: hStyle },
+	          " mode=\"slide\""
+	        ),
+	        _react2.default.createElement(_wrapper2.default, { mode: "slide" })
 	      );
 	    }
 	  }]);
@@ -20132,7 +20141,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var props = {
 	        slides: slides,
 	        autoPlay: this.state.autoPlay,
-	        width: 800
+	        width: 800,
+	        mode: this.props.mode
 	      };
 	      return _react2.default.createElement(
 	        "div",
@@ -20180,9 +20190,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _Slides = __webpack_require__(171);
+	var _slides = __webpack_require__(171);
 
-	var _Slides2 = _interopRequireDefault(_Slides);
+	var _slides2 = _interopRequireDefault(_slides);
+
+	var _slidesFademode = __webpack_require__(172);
+
+	var _slidesFademode2 = _interopRequireDefault(_slidesFademode);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20202,6 +20216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
 
+	    console.log('props:', props);
 	    _this.state = {
 	      timer: 0,
 	      index: props.initialSlide + 1, // +1 looking cloned slide
@@ -20219,9 +20234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        width: el.clientWidth
 	      });
 	      if (this.state.playing) {
-	        this.setState({
-	          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-	        });
+	        this._setTimer();
 	      }
 	    }
 	  }, {
@@ -20233,9 +20246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        if (nextProps.autoPlay) {
 	          clearTimeout(this.state.timer);
-	          this.setState({
-	            timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-	          });
+	          this._setTimer();
 	        }
 	      }
 	    }
@@ -20247,7 +20258,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 	      var index = this.state.index + 1;
+	      var min = 0;
+	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+	      if (this.props.mode === "fade" && index >= max) {
+	        index = min + 1;
+	      }
 	      this._updateIndex(index);
+	      this._setTimer();
+	    }
+	  }, {
+	    key: "_setTimer",
+	    value: function _setTimer() {
 	      this.setState({
 	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
 	      });
@@ -20353,6 +20374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var width = this.state.width || this.props.width;
 	      var style = {
 	        width: width || "100%",
+	        position: "relative",
 	        overflow: "hidden"
 	      };
 	      var firstSlide = this.props.slides[0];
@@ -20367,7 +20389,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        loop: this.loop.bind(this),
 	        onClickSlide: this.onClickSlide.bind(this),
 	        onTransitionEnd: this.onTransitionEnd.bind(this),
-	        enableTransition: this.state.enableTransition
+	        enableTransition: this.state.enableTransition,
+	        mode: this.props.mode
 	      };
 
 	      if (this.props.dots) {
@@ -20401,10 +20424,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	          "Next"
 	        );
 	      }
+	      var slidesComponent = this.props.mode === "fade" ? _react2.default.createElement(_slidesFademode2.default, slidesProps) : _react2.default.createElement(_slides2.default, slidesProps);
+	      var dummySlide = this.props.mode === "fade" ? _react2.default.createElement(
+	        "div",
+	        { style: { visibility: "hidden", zIndex: -1 } },
+	        slides[0]
+	      ) : "";
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "scarousel", style: style },
-	        _react2.default.createElement(_Slides2.default, slidesProps),
+	        slidesComponent,
+	        dummySlide,
 	        prevArrow,
 	        nextArrow,
 	        _react2.default.createElement(
@@ -20429,7 +20459,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  initialSlide: _react2.default.PropTypes.number,
 	  pauseOnAction: _react2.default.PropTypes.bool,
 	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.number
+	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
+	  mode: _react2.default.PropTypes.string,
+	  backgroundColor: _react2.default.PropTypes.string
 	};
 	ReactSCarousel.defaultProps = {
 	  arrows: true,
@@ -20441,7 +20473,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  initialSlide: 0,
 	  pauseOnAction: true,
 	  slides: [],
-	  width: 0
+	  width: "auto",
+	  mode: "slide",
+	  backgroundColor: "white"
 	};
 
 	exports.default = ReactSCarousel;
@@ -36609,7 +36643,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        var style = {
 	          width: _this2.props.width,
-	          float: "left"
+	          cssFloat: "left"
 	        };
 	        return _react2.default.createElement(
 	          "div",
@@ -36655,6 +36689,135 @@ return /******/ (function(modules) { // webpackBootstrap
 	  loop: function loop() {},
 	  onClickSlide: function onClickSlide() {},
 	  onTransitionEnd: function onTransitionEnd() {}
+	};
+
+	exports.default = Slides;
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _lodash = __webpack_require__(168);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _classnames = __webpack_require__(170);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Slides = function (_Component) {
+	  _inherits(Slides, _Component);
+
+	  function Slides(props) {
+	    _classCallCheck(this, Slides);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Slides).call(this, props));
+	  }
+
+	  _createClass(Slides, [{
+	    key: "componentDidUpdate",
+	    value: function componentDidUpdate(prevProps) {
+	      if (!this.props.enableTransition) {
+	        _lodash2.default.defer(this.props.loop);
+	      }
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this2 = this;
+
+	      console.log('this.props.index:', this.props.index);
+	      var count = this.props.slides.length;
+	      var transition = this.props.enableTransition ? "opacity " + this.props.duration + "ms " + this.props.cssEase : "none";
+	      var slides = this.props.slides.map(function (slide, i) {
+	        var isPrev = _this2.props.index - 1 === i;
+	        var isActive = _this2.props.index === i;
+	        var isNext = _this2.props.index === i - 1 || 0 === i && _this2.props.index >= count - 1;
+	        var cName = (0, _classnames2.default)("slide", {
+	          prev: isPrev,
+	          active: isActive,
+	          next: isNext
+	        });
+	        var style = {
+	          width: _this2.props.width,
+	          height: _this2.props.height,
+	          position: "absolute",
+	          top: 0,
+	          left: 0,
+	          zIndex: count - i,
+	          opacity: isActive ? 1 : 0,
+	          transition: transition
+	        };
+	        return _react2.default.createElement(
+	          "div",
+	          { key: "slide" + i, className: cName,
+	            style: style, onClick: _this2.props.onClickSlide },
+	          slide
+	        );
+	      });
+	      var slidesStyle = {
+	        position: "absolute",
+	        top: 0,
+	        left: 0,
+	        width: this.props.width * this.props.slides.length,
+	        backgroundColor: this.props.backgroundColor
+	      };
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "scarousel-slides", style: slidesStyle },
+	        slides
+	      );
+	    }
+	  }]);
+
+	  return Slides;
+	}(_react.Component);
+
+	Slides.propTypes = {
+	  slides: _react2.default.PropTypes.array,
+	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
+	  height: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
+	  index: _react2.default.PropTypes.number,
+	  duration: _react2.default.PropTypes.number,
+	  cssEase: _react2.default.PropTypes.string,
+	  loop: _react2.default.PropTypes.func,
+	  onClickSlide: _react2.default.PropTypes.func,
+	  onTransitionEnd: _react2.default.PropTypes.func,
+	  mode: _react2.default.PropTypes.string,
+	  backgroundColor: _react2.default.PropTypes.string
+	};
+	Slides.defaultProps = {
+	  slides: [],
+	  width: "auto",
+	  height: "auto",
+	  index: 0,
+	  duration: 500,
+	  cssEase: "ease-in-out",
+	  loop: function loop() {},
+	  onClickSlide: function onClickSlide() {},
+	  onTransitionEnd: function onTransitionEnd() {},
+	  mode: "slide",
+	  backgroundColor: "white"
 	};
 
 	exports.default = Slides;

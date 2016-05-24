@@ -5,20 +5,21 @@ import ReactDOM from "react-dom";
 
 import Carousel from "./wrapper.jsx";
 
-const COUNT = 3;
-
 class App extends Component {
   constructor (props) {
     super(props);
   }
   render () {
-    var carousels = [];
-    for (var i=0; i<COUNT; i++) {
-      carousels.push(<Carousel key={`item${i}`} />);
-    }
+    var hStyle = {
+      fontSize: 20,
+      margin: "20px",
+    };
     return (
-      <div>
-        {carousels}
+      <div style={{ position: "relative" }}>
+        <h2 style={hStyle}> mode="fade"</h2>
+        <Carousel mode="fade" />
+        <h2 style={hStyle}> mode="slide"</h2>
+        <Carousel mode="slide" />
       </div>
     );
   }
