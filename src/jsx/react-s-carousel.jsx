@@ -76,6 +76,7 @@ class ReactSCarousel extends Component {
       playing: false,
       enableClick: false
     });
+
   }
   onClickNext () {
     if (this.state.enableClick) {
@@ -131,9 +132,7 @@ class ReactSCarousel extends Component {
       var isAfterClick = this.state.enableClick === false;
       var shouldBePause = isAfterClick && this.props.pauseOnAction;
       if (this.props.autoPlay && !shouldBePause) {
-        this.setState({
-          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-        });
+        this._setTimer();
       }
     }
     this.setState(state);

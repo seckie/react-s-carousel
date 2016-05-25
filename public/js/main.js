@@ -20370,9 +20370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var isAfterClick = this.state.enableClick === false;
 	        var shouldBePause = isAfterClick && this.props.pauseOnAction;
 	        if (this.props.autoPlay && !shouldBePause) {
-	          this.setState({
-	            timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-	          });
+	          this._setTimer();
 	        }
 	      }
 	      this.setState(state);
