@@ -159,6 +159,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "_setTimer",
 	    value: function _setTimer() {
 	      this.setState({
+	        playing: true,
+	        enableClick: true
+	      });
+	      clearTimeout(this.state.timer);
+	      this.setState({
 	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
 	      });
 	    }
@@ -182,6 +187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playing: false,
 	        enableClick: false
 	      });
+	      this._setTimer();
 	    }
 	  }, {
 	    key: "onClickNext",
@@ -220,6 +226,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: "onMouseEnterSlide",
+	    value: function onMouseEnterSlide(e) {
+	      this.setState({
+	        playing: false,
+	        enableClick: false
+	      });
+	    }
+	  }, {
+	    key: "onMouseLeaveSlide",
+	    value: function onMouseLeaveSlide(e) {
+	      this.setState({
+	        playing: true,
+	        enableClick: true
+	      });
+	      this._setTimer();
+	    }
+	  }, {
 	    key: "loop",
 	    value: function loop() {
 	      this.setState({
@@ -249,9 +272,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var isAfterClick = this.state.enableClick === false;
 	        var shouldBePause = isAfterClick && this.props.pauseOnAction;
 	        if (this.props.autoPlay && !shouldBePause) {
-	          this.setState({
-	            timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-	          });
+	          this._setTimer();
 	        }
 	      }
 	      this.setState(state);
@@ -262,11 +283,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
-	      var style = {
-	        width: width,
-	        position: "relative",
-	        overflow: "hidden"
-	      };
 	      var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
 	      var slidesProps = {
 	        slides: slides,
@@ -322,10 +338,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { style: { visibility: "hidden", zIndex: -1 } },
 	        slides[0]
 	      ) : "";
+	      var style = {
+	        width: width,
+	        position: "relative"
+	      };
+	      style.overflow = this.props.mode === "fade" ? "visible" : "hidden";
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "scarousel", style: style },
-	        slidesComponent,
+	        { className: "scarousel" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "scarousel-viewport", style: style,
+	            onMouseEnter: this.onMouseEnterSlide.bind(this),
+	            onMouseLeave: this.onMouseLeaveSlide.bind(this) },
+	          slidesComponent
+	        ),
 	        dummySlide,
 	        prevArrow,
 	        nextArrow,
