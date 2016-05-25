@@ -12,9 +12,10 @@ var prefix = "scarousel";
 class ReactSCarousel extends Component {
   constructor (props) {
     super(props);
+    var clonedCount = this.props.slides.length; // this.props.slides.length looking cloned slides
     this.state = {
       timer: 0,
-      index: props.initialSlide + 1, // +1 looking cloned slide
+      index: props.initialSlide + clonedCount,
       playing: props.autoPlay,
       enableTransition: true
     };
@@ -46,7 +47,8 @@ class ReactSCarousel extends Component {
     }
     var index = this.state.index + 1;
     var min = 0;
-    var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+    var clonedCount = this.props.slides.length * 2; // cloned slides
+    var max = this.props.slides.length - 1 + clonedCount;
     if (this.props.mode === "fade" && index >= max) {
       index = min + 1;
     }
@@ -60,7 +62,8 @@ class ReactSCarousel extends Component {
   }
   _updateIndex (index) {
     var min = 0;
-    var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+    var clonedCount = this.props.slides.length * 2; // cloned slides
+    var max = this.props.slides.length - 1 + clonedCount;
     if (index < min) {
       index = max;
     } else if (max < index) {
@@ -136,18 +139,17 @@ class ReactSCarousel extends Component {
     this.setState(state);
   }
   render () {
-    var width = this.state.width || this.props.width;
+    var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
     var style = {
-      width: width || "100%",
+      width: width,
       position: "relative",
       overflow: "hidden"
     };
-    var firstSlide = this.props.slides[0];
-    var lastSlide = this.props.slides[this.props.slides.length - 1];
-    var slides = [].concat(lastSlide, this.props.slides, firstSlide);
+    var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
     var slidesProps = {
       slides          : slides,
       width           : width,
+      slideWidth      : this.props.slideWidth || width,
       index           : this.state.index,
       duration        : this.props.duration,
       cssEase         : this.props.cssEase,
@@ -160,16 +162,19 @@ class ReactSCarousel extends Component {
 
     if (this.props.dots) {
       var dots = slides.map((slide, i) => {
-        if (i === 0 || slides.length - 1 <= i) {
+        if (i < this.props.slides.length || this.props.slides.length * 2 <= i) {
           return "";
         }
+        var count = this.props.slides.length;
+        var i2 = i % count;
+        var stateIndex = this.state.index % count;
         var cName = classnames(`${prefix}-dot`, {
-          active: this.state.index === i
+          active: stateIndex === i2
         });
         return (
           <button className={cName} key={`dot${i}`}
-            data-index={i}
-            onClick={this.onClickDot.bind(this)}>{i}</button>
+            data-index={i2}
+            onClick={this.onClickDot.bind(this)}>{i2}</button>
         );
       });
     }
@@ -217,12 +222,16 @@ ReactSCarousel.propTypes = {
   initialSlide    : React.PropTypes.number,
   pauseOnAction   : React.PropTypes.bool,
   slides          : React.PropTypes.array,
-  width          : React.PropTypes.oneOfType([
+  width           : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
+  slideWidth      : React.PropTypes.oneOfType([
     React.PropTypes.number,
     React.PropTypes.string
   ]),
   mode            : React.PropTypes.string,
-  backgroundColor: React.PropTypes.string
+  backgroundColor : React.PropTypes.string
 };
 ReactSCarousel.defaultProps = {
   arrows          : true,

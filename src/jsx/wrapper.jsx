@@ -27,15 +27,16 @@ class Carousel extends Component {
     var slides = list.map((slide, i) => {
       return (
         <a href={slide.href} key={`slide${i}`}>
-        <img src={slide.imgSrc} alt={slide.imgAlt} /></a>
+        <img src={slide.imgSrc} alt={slide.imgAlt} width={this.props.slideWidth} /></a>
       );
     });
     var props = {
       slides: slides,
       autoPlay: this.state.autoPlay,
-      width: 800,
       mode: this.props.mode
     };
+    props.slideWidth = this.props.slideWidth || undefined;
+    props.width = this.props.width || 800;
     return (
       <div>
         <ReactSCarousel {...props} />

@@ -19,7 +19,7 @@ class Slides extends Component {
         active: this.props.index === i
       });
       var style = {
-        width: this.props.width,
+        width: this.props.slideWidth,
         cssFloat: "left"
       };
       return (
@@ -31,8 +31,8 @@ class Slides extends Component {
     });
     var transition = this.props.enableTransition ? `transform ${this.props.duration}ms ${this.props.cssEase}` : "none";
     var slidesStyle = {
-      width: this.props.width * this.props.slides.length,
-      transform: `translateX(${-this.props.width * this.props.index}px)`,
+      width: this.props.slideWidth * this.props.slides.length,
+      transform: `translateX(${-this.props.slideWidth * this.props.index}px)`,
       transition: transition
     };
     return (
@@ -46,7 +46,14 @@ class Slides extends Component {
 
 Slides.propTypes = {
   slides         : React.PropTypes.array,
-  width          : React.PropTypes.number,
+  width          : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
+  slideWidth     : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
   index          : React.PropTypes.number,
   duration       : React.PropTypes.number,
   cssEase        : React.PropTypes.string,
@@ -56,7 +63,8 @@ Slides.propTypes = {
 };
 Slides.defaultProps = {
   slides         : [],
-  width          : 0,
+  width          : "auto",
+  slideWidth     : "auto",
   index          : 0,
   duration       : 500,
   cssEase        : "ease-in-out",
