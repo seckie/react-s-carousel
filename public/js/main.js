@@ -20280,6 +20280,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "_setTimer",
 	    value: function _setTimer() {
 	      this.setState({
+	        playing: true,
+	        enableClick: true
+	      });
+	      clearTimeout(this.state.timer);
+	      this.setState({
 	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
 	      });
 	    }
@@ -20303,6 +20308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playing: false,
 	        enableClick: false
 	      });
+	      this._setTimer();
 	    }
 	  }, {
 	    key: "onClickNext",
@@ -20339,6 +20345,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.pauseOnAction) {
 	        this.setState({ playing: false });
 	      }
+	    }
+	  }, {
+	    key: "onMouseEnterSlide",
+	    value: function onMouseEnterSlide(e) {
+	      this.setState({
+	        playing: false,
+	        enableClick: false
+	      });
+	    }
+	  }, {
+	    key: "onMouseLeaveSlide",
+	    value: function onMouseLeaveSlide(e) {
+	      this.setState({
+	        playing: true,
+	        enableClick: true
+	      });
+	      this._setTimer();
 	    }
 	  }, {
 	    key: "loop",
@@ -20446,7 +20469,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { className: "scarousel" },
 	        _react2.default.createElement(
 	          "div",
-	          { className: "scarousel-viewport", style: style },
+	          { className: "scarousel-viewport", style: style,
+	            onMouseEnter: this.onMouseEnterSlide.bind(this),
+	            onMouseLeave: this.onMouseLeaveSlide.bind(this) },
 	          slidesComponent
 	        ),
 	        dummySlide,

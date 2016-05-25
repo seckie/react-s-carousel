@@ -57,6 +57,11 @@ class ReactSCarousel extends Component {
   }
   _setTimer () {
     this.setState({
+      playing: true,
+      enableClick: true
+    });
+    clearTimeout(this.state.timer);
+    this.setState({
       timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
     });
   }
@@ -76,7 +81,7 @@ class ReactSCarousel extends Component {
       playing: false,
       enableClick: false
     });
-
+    this._setTimer();
   }
   onClickNext () {
     if (this.state.enableClick) {
@@ -105,6 +110,19 @@ class ReactSCarousel extends Component {
     if (this.props.pauseOnAction) {
       this.setState({ playing: false });
     }
+  }
+  onMouseEnterSlide (e) {
+    this.setState({
+      playing: false,
+      enableClick: false
+    });
+  }
+  onMouseLeaveSlide (e) {
+    this.setState({
+      playing: true,
+      enableClick: true
+    });
+    this._setTimer();
   }
   loop () {
     this.setState({
@@ -199,7 +217,9 @@ class ReactSCarousel extends Component {
     };
     return (
       <div className="scarousel">
-        <div className="scarousel-viewport" style={style}>
+        <div className="scarousel-viewport" style={style}
+          onMouseEnter={this.onMouseEnterSlide.bind(this)}
+          onMouseLeave={this.onMouseLeaveSlide.bind(this)}>
           {slidesComponent}
         </div>
         {dummySlide}
