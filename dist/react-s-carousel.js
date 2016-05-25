@@ -104,9 +104,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
 
+	    var clonedCount = _this.props.slides.length; // this.props.slides.length looking cloned slides
 	    _this.state = {
 	      timer: 0,
-	      index: props.initialSlide + 1, // +1 looking cloned slide
+	      index: props.initialSlide + clonedCount,
 	      playing: props.autoPlay,
 	      enableTransition: true
 	    };
@@ -146,7 +147,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      var index = this.state.index + 1;
 	      var min = 0;
-	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+	      var clonedCount = this.props.slides.length * 2; // cloned slides
+	      var max = this.props.slides.length - 1 + clonedCount;
 	      if (this.props.mode === "fade" && index >= max) {
 	        index = min + 1;
 	      }
@@ -164,7 +166,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "_updateIndex",
 	    value: function _updateIndex(index) {
 	      var min = 0;
-	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+	      var clonedCount = this.props.slides.length * 2; // cloned slides
+	      var max = this.props.slides.length - 1 + clonedCount;
 	      if (index < min) {
 	        index = max;
 	      } else if (max < index) {
@@ -258,18 +261,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _this2 = this;
 
-	      var width = this.state.width || this.props.width;
+	      var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
 	      var style = {
-	        width: width || "100%",
+	        width: width,
 	        position: "relative",
 	        overflow: "hidden"
 	      };
-	      var firstSlide = this.props.slides[0];
-	      var lastSlide = this.props.slides[this.props.slides.length - 1];
-	      var slides = [].concat(lastSlide, this.props.slides, firstSlide);
+	      var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
 	      var slidesProps = {
 	        slides: slides,
 	        width: width,
+	        slideWidth: this.props.slideWidth || width,
 	        index: this.state.index,
 	        duration: this.props.duration,
 	        cssEase: this.props.cssEase,
@@ -282,18 +284,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (this.props.dots) {
 	        var dots = slides.map(function (slide, i) {
-	          if (i === 0 || slides.length - 1 <= i) {
+	          if (i < _this2.props.slides.length || _this2.props.slides.length * 2 <= i) {
 	            return "";
 	          }
+	          var count = _this2.props.slides.length;
+	          var i2 = i % count;
+	          var stateIndex = _this2.state.index % count;
 	          var cName = (0, _classnames2.default)(prefix + "-dot", {
-	            active: _this2.state.index === i
+	            active: stateIndex === i2
 	          });
 	          return _react2.default.createElement(
 	            "button",
 	            { className: cName, key: "dot" + i,
-	              "data-index": i,
+	              "data-index": i2,
 	              onClick: _this2.onClickDot.bind(_this2) },
-	            i
+	            i2
 	          );
 	        });
 	      }
@@ -347,6 +352,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  pauseOnAction: _react2.default.PropTypes.bool,
 	  slides: _react2.default.PropTypes.array,
 	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
+	  slideWidth: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
 	  mode: _react2.default.PropTypes.string,
 	  backgroundColor: _react2.default.PropTypes.string
 	};
@@ -449,7 +455,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          active: _this2.props.index === i
 	        });
 	        var style = {
-	          width: _this2.props.width,
+	          width: _this2.props.slideWidth,
 	          cssFloat: "left"
 	        };
 	        return _react2.default.createElement(
@@ -461,8 +467,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	      var transition = this.props.enableTransition ? "transform " + this.props.duration + "ms " + this.props.cssEase : "none";
 	      var slidesStyle = {
-	        width: this.props.width * this.props.slides.length,
-	        transform: "translateX(" + -this.props.width * this.props.index + "px)",
+	        width: this.props.slideWidth * this.props.slides.length,
+	        transform: "translateX(" + -this.props.slideWidth * this.props.index + "px)",
 	        transition: transition
 	      };
 	      return _react2.default.createElement(
@@ -479,7 +485,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	Slides.propTypes = {
 	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.number,
+	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
+	  slideWidth: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
 	  index: _react2.default.PropTypes.number,
 	  duration: _react2.default.PropTypes.number,
 	  cssEase: _react2.default.PropTypes.string,
@@ -489,7 +496,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	Slides.defaultProps = {
 	  slides: [],
-	  width: 0,
+	  width: "auto",
+	  slideWidth: "auto",
 	  index: 0,
 	  duration: 500,
 	  cssEase: "ease-in-out",

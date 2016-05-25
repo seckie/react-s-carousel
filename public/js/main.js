@@ -20225,9 +20225,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactSCarousel).call(this, props));
 
+	    var clonedCount = _this.props.slides.length; // this.props.slides.length looking cloned slides
 	    _this.state = {
 	      timer: 0,
-	      index: props.initialSlide + 1, // +1 looking cloned slide
+	      index: props.initialSlide + clonedCount,
 	      playing: props.autoPlay,
 	      enableTransition: true
 	    };
@@ -20267,7 +20268,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	      var index = this.state.index + 1;
 	      var min = 0;
-	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+	      var clonedCount = this.props.slides.length * 2; // cloned slides
+	      var max = this.props.slides.length - 1 + clonedCount;
 	      if (this.props.mode === "fade" && index >= max) {
 	        index = min + 1;
 	      }
@@ -20285,7 +20287,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "_updateIndex",
 	    value: function _updateIndex(index) {
 	      var min = 0;
-	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
+	      var clonedCount = this.props.slides.length * 2; // cloned slides
+	      var max = this.props.slides.length - 1 + clonedCount;
 	      if (index < min) {
 	        index = max;
 	      } else if (max < index) {
@@ -20385,9 +20388,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        position: "relative",
 	        overflow: "hidden"
 	      };
-	      var firstSlide = this.props.slides[0];
-	      var lastSlide = this.props.slides[this.props.slides.length - 1];
-	      var slides = [].concat(lastSlide, this.props.slides, firstSlide);
+	      var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
 	      var slidesProps = {
 	        slides: slides,
 	        width: width,
@@ -20404,18 +20405,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (this.props.dots) {
 	        var dots = slides.map(function (slide, i) {
-	          if (i === 0 || slides.length - 1 <= i) {
+	          if (i < _this2.props.slides.length || _this2.props.slides.length * 2 <= i) {
 	            return "";
 	          }
+	          var count = _this2.props.slides.length;
+	          var i2 = i % count;
+	          var stateIndex = _this2.state.index % count;
 	          var cName = (0, _classnames2.default)(prefix + "-dot", {
-	            active: _this2.state.index === i
+	            active: stateIndex === i2
 	          });
 	          return _react2.default.createElement(
 	            "button",
 	            { className: cName, key: "dot" + i,
-	              "data-index": i,
+	              "data-index": i2,
 	              onClick: _this2.onClickDot.bind(_this2) },
-	            i
+	            i2
 	          );
 	        });
 	      }
