@@ -20383,11 +20383,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
-	      var style = {
-	        width: width,
-	        position: "relative",
-	        overflow: "hidden"
-	      };
 	      var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
 	      var slidesProps = {
 	        slides: slides,
@@ -20443,10 +20438,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        { style: { visibility: "hidden", zIndex: -1 } },
 	        slides[0]
 	      ) : "";
+	      var style = {
+	        width: width,
+	        position: "relative",
+	        overflow: "hidden"
+	      };
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "scarousel", style: style },
-	        slidesComponent,
+	        { className: "scarousel" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "scarousel-viewport", style: style },
+	          slidesComponent
+	        ),
 	        dummySlide,
 	        prevArrow,
 	        nextArrow,

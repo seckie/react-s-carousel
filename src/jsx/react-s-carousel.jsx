@@ -140,11 +140,6 @@ class ReactSCarousel extends Component {
   }
   render () {
     var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
-    var style = {
-      width: width,
-      position: "relative",
-      overflow: "hidden"
-    };
     var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
     var slidesProps = {
       slides          : slides,
@@ -198,9 +193,16 @@ class ReactSCarousel extends Component {
     var dummySlide = this.props.mode === "fade" ? (
       <div style={{ visibility: "hidden", zIndex: -1 }}>{slides[0]}</div>
     ) : "";
+    var style = {
+      width: width,
+      position: "relative",
+      overflow: "hidden"
+    };
     return (
-      <div className="scarousel" style={style}>
-        {slidesComponent}
+      <div className="scarousel">
+        <div className="scarousel-viewport" style={style}>
+          {slidesComponent}
+        </div>
         {dummySlide}
         {prevArrow}
         {nextArrow}
