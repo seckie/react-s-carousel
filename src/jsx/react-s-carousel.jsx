@@ -136,9 +136,9 @@ class ReactSCarousel extends Component {
     this.setState(state);
   }
   render () {
-    var width = this.state.width || this.props.width;
+    var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
     var style = {
-      width: width || "100%",
+      width: width,
       position: "relative",
       overflow: "hidden"
     };
@@ -148,6 +148,7 @@ class ReactSCarousel extends Component {
     var slidesProps = {
       slides          : slides,
       width           : width,
+      slideWidth      : this.props.slideWidth || width,
       index           : this.state.index,
       duration        : this.props.duration,
       cssEase         : this.props.cssEase,
@@ -217,12 +218,16 @@ ReactSCarousel.propTypes = {
   initialSlide    : React.PropTypes.number,
   pauseOnAction   : React.PropTypes.bool,
   slides          : React.PropTypes.array,
-  width          : React.PropTypes.oneOfType([
+  width           : React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.string
+  ]),
+  slideWidth      : React.PropTypes.oneOfType([
     React.PropTypes.number,
     React.PropTypes.string
   ]),
   mode            : React.PropTypes.string,
-  backgroundColor: React.PropTypes.string
+  backgroundColor : React.PropTypes.string
 };
 ReactSCarousel.defaultProps = {
   arrows          : true,
