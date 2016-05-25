@@ -20461,9 +20461,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      ) : "";
 	      var style = {
 	        width: width,
-	        position: "relative",
-	        overflow: "hidden"
+	        position: "relative"
 	      };
+	      style.overflow = this.props.mode === "fade" ? "visible" : "hidden";
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "scarousel" },

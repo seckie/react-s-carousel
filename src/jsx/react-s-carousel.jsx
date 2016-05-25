@@ -212,9 +212,9 @@ class ReactSCarousel extends Component {
     ) : "";
     var style = {
       width: width,
-      position: "relative",
-      overflow: "hidden"
+      position: "relative"
     };
+    style.overflow = this.props.mode === "fade" ? "visible" : "hidden";
     return (
       <div className="scarousel">
         <div className="scarousel-viewport" style={style}
