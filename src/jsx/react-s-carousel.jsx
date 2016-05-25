@@ -57,6 +57,11 @@ class ReactSCarousel extends Component {
   }
   _setTimer () {
     this.setState({
+      playing: true,
+      enableClick: true
+    });
+    clearTimeout(this.state.timer);
+    this.setState({
       timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
     });
   }
@@ -76,6 +81,7 @@ class ReactSCarousel extends Component {
       playing: false,
       enableClick: false
     });
+    this._setTimer();
   }
   onClickNext () {
     if (this.state.enableClick) {
@@ -105,6 +111,19 @@ class ReactSCarousel extends Component {
       this.setState({ playing: false });
     }
   }
+  onMouseEnterSlide (e) {
+    this.setState({
+      playing: false,
+      enableClick: false
+    });
+  }
+  onMouseLeaveSlide (e) {
+    this.setState({
+      playing: true,
+      enableClick: true
+    });
+    this._setTimer();
+  }
   loop () {
     this.setState({
       enableTransition: true
@@ -131,20 +150,13 @@ class ReactSCarousel extends Component {
       var isAfterClick = this.state.enableClick === false;
       var shouldBePause = isAfterClick && this.props.pauseOnAction;
       if (this.props.autoPlay && !shouldBePause) {
-        this.setState({
-          timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
-        });
+        this._setTimer();
       }
     }
     this.setState(state);
   }
   render () {
     var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
-    var style = {
-      width: width,
-      position: "relative",
-      overflow: "hidden"
-    };
     var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
     var slidesProps = {
       slides          : slides,
@@ -198,9 +210,18 @@ class ReactSCarousel extends Component {
     var dummySlide = this.props.mode === "fade" ? (
       <div style={{ visibility: "hidden", zIndex: -1 }}>{slides[0]}</div>
     ) : "";
+    var style = {
+      width: width,
+      position: "relative"
+    };
+    style.overflow = this.props.mode === "fade" ? "visible" : "hidden";
     return (
-      <div className="scarousel" style={style}>
-        {slidesComponent}
+      <div className="scarousel">
+        <div className="scarousel-viewport" style={style}
+          onMouseEnter={this.onMouseEnterSlide.bind(this)}
+          onMouseLeave={this.onMouseLeaveSlide.bind(this)}>
+          {slidesComponent}
+        </div>
         {dummySlide}
         {prevArrow}
         {nextArrow}
