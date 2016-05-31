@@ -20267,9 +20267,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        clearTimeout(this.state.timer);
 	        return;
 	      }
-	      this.setState({
-	        count: this.state.count + 1
-	      });
 	      this._updateIndex(this.state.index + 1);
 	      this._setTimer();
 	    }
@@ -20287,7 +20284,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: "_updateIndex",
-	    value: function _updateIndex(index) {
+	    value: function _updateIndex(index, count) {
 	      var min = 0;
 	      var clonedCount = this.props.slides.length * 2; // cloned slides
 	      var max = this.props.slides.length - 1 + clonedCount;
@@ -20296,7 +20293,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else if (max < index) {
 	        index = min;
 	      }
-	      this.setState({ index: index });
+	      count = typeof count === "number" ? count : this.state.count + 1;
+	      this.setState({
+	        index: index,
+	        count: count
+	      });
 	    }
 	  }, {
 	    key: "_updateStateOnClick",
@@ -20321,7 +20322,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function onClickPrev() {
 	      if (this.state.enableClick) {
 	        var index = this.state.index - 1;
-	        this._updateIndex(index);
+	        var count = this.state.count - 1;
+	        this._updateIndex(index, count);
 	        this._updateStateOnClick();
 	      }
 	    }
@@ -36816,7 +36818,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          left: 0,
 	          opacity: isActive ? 1 : 0,
 	          display: isPrev || isActive ? "block" : "none",
-	          transition: transition
+	          transition: isPrev || isActive || isNext ? transition : "none"
 	        };
 	        switch (true) {
 	          case isPrev:

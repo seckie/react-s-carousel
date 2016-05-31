@@ -41,7 +41,7 @@ class Slides extends Component {
         left: 0,
         opacity: isActive ? 1 : 0,
         display: isPrev || isActive ? "block" : "none",
-        transition: transition
+        transition: isPrev || isActive || isNext ? transition : "none"
       };
       switch(true) {
         case isPrev:

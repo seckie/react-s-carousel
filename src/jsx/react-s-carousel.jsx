@@ -46,9 +46,6 @@ class ReactSCarousel extends Component {
       clearTimeout(this.state.timer);
       return;
     }
-    this.setState({
-      count: this.state.count + 1
-    });
     this._updateIndex(this.state.index + 1);
     this._setTimer();
   }
@@ -62,7 +59,7 @@ class ReactSCarousel extends Component {
       timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
     });
   }
-  _updateIndex (index) {
+  _updateIndex (index, count) {
     var min = 0;
     var clonedCount = this.props.slides.length * 2; // cloned slides
     var max = this.props.slides.length - 1 + clonedCount;
@@ -71,7 +68,11 @@ class ReactSCarousel extends Component {
     } else if (max < index) {
       index = min;
     }
-    this.setState({ index: index });
+    count = typeof count === "number" ? count : this.state.count + 1;
+    this.setState({
+      index: index,
+      count: count
+    });
   }
   _updateStateOnClick () {
     this.setState({
@@ -90,7 +91,8 @@ class ReactSCarousel extends Component {
   onClickPrev () {
     if (this.state.enableClick) {
       var index = this.state.index - 1;
-      this._updateIndex(index);
+      var count = this.state.count - 1
+      this._updateIndex(index, count);
       this._updateStateOnClick();
     }
   }

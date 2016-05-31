@@ -108,6 +108,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this.state = {
 	      timer: 0,
 	      index: props.initialSlide + clonedCount,
+	      count: 0,
 	      playing: props.autoPlay,
 	      enableTransition: true
 	    };
@@ -145,14 +146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        clearTimeout(this.state.timer);
 	        return;
 	      }
-	      var index = this.state.index + 1;
-	      var min = 0;
-	      var clonedCount = this.props.slides.length * 2; // cloned slides
-	      var max = this.props.slides.length - 1 + clonedCount;
-	      if (this.props.mode === "fade" && index >= max) {
-	        index = min + 1;
-	      }
-	      this._updateIndex(index);
+	      this._updateIndex(this.state.index + 1);
 	      this._setTimer();
 	    }
 	  }, {
@@ -169,7 +163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: "_updateIndex",
-	    value: function _updateIndex(index) {
+	    value: function _updateIndex(index, count) {
 	      var min = 0;
 	      var clonedCount = this.props.slides.length * 2; // cloned slides
 	      var max = this.props.slides.length - 1 + clonedCount;
@@ -178,7 +172,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else if (max < index) {
 	        index = min;
 	      }
-	      this.setState({ index: index });
+	      count = typeof count === "number" ? count : this.state.count + 1;
+	      this.setState({
+	        index: index,
+	        count: count
+	      });
 	    }
 	  }, {
 	    key: "_updateStateOnClick",
@@ -203,7 +201,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function onClickPrev() {
 	      if (this.state.enableClick) {
 	        var index = this.state.index - 1;
-	        this._updateIndex(index);
+	        var count = this.state.count - 1;
+	        this._updateIndex(index, count);
 	        this._updateStateOnClick();
 	      }
 	    }
@@ -289,6 +288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        width: width,
 	        slideWidth: this.props.slideWidth || width,
 	        index: this.state.index,
+	        count: this.state.count,
 	        duration: this.props.duration,
 	        cssEase: this.props.cssEase,
 	        loop: this.loop.bind(this),
@@ -584,16 +584,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: "onTransitionEnd",
+	    value: function onTransitionEnd(e) {
+	      var el = e.currentTarget;
+	      if (el.style.opacity == 0) {
+	        el.style.display = "none";
+	      }
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      var _this2 = this;
 
 	      var count = this.props.slides.length;
 	      var transition = this.props.enableTransition ? "opacity " + this.props.duration + "ms " + this.props.cssEase : "none";
+	      var index = this.props.index;
+	      var prevIndex = index - 1 >= 0 ? index - 1 : this.props.slides.length - 1;
 	      var slides = this.props.slides.map(function (slide, i) {
-	        var isPrev = _this2.props.index - 1 === i;
-	        var isActive = _this2.props.index === i;
-	        var isNext = _this2.props.index === i - 1 || 0 === i && _this2.props.index >= count - 1;
+	        var isPrev = prevIndex === i;
+	        var isActive = index === i;
+	        var isNext = index === i - 1 || 0 === i && index >= count - 1;
 	        var cName = (0, _classnames2.default)("slide", {
 	          prev: isPrev,
 	          active: isActive,
@@ -605,14 +615,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	          position: "absolute",
 	          top: 0,
 	          left: 0,
-	          zIndex: count - i,
 	          opacity: isActive ? 1 : 0,
-	          transition: transition
+	          display: isPrev || isActive ? "block" : "none",
+	          transition: isPrev || isActive || isNext ? transition : "none"
 	        };
+	        switch (true) {
+	          case isPrev:
+	            style.zIndex = _this2.props.count + 1;
+	            break;
+	          case isActive:
+	            style.zIndex = _this2.props.count;
+	            break;
+	          case isNext:
+	            style.zIndex = _this2.props.count - 1;
+	            break;
+	          default:
+	            style.zIndex = 9999;
+	        }
 	        return _react2.default.createElement(
 	          "div",
 	          { key: "slide" + i, className: cName,
-	            style: style, onClick: _this2.props.onClickSlide },
+	            style: style, onClick: _this2.props.onClickSlide,
+	            onTransitionEnd: _this2.onTransitionEnd.bind(_this2) },
 	          slide
 	        );
 	      });
@@ -639,6 +663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
 	  height: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
 	  index: _react2.default.PropTypes.number,
+	  count: _react2.default.PropTypes.number,
 	  duration: _react2.default.PropTypes.number,
 	  cssEase: _react2.default.PropTypes.string,
 	  loop: _react2.default.PropTypes.func,
@@ -652,6 +677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  width: "auto",
 	  height: "auto",
 	  index: 0,
+	  count: 0,
 	  duration: 500,
 	  cssEase: "ease-in-out",
 	  loop: function loop() {},
