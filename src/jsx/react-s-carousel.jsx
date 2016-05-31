@@ -16,6 +16,7 @@ class ReactSCarousel extends Component {
     this.state = {
       timer: 0,
       index: props.initialSlide + clonedCount,
+      count: 0,
       playing: props.autoPlay,
       enableTransition: true
     };
@@ -45,14 +46,10 @@ class ReactSCarousel extends Component {
       clearTimeout(this.state.timer);
       return;
     }
-    var index = this.state.index + 1;
-    var min = 0;
-    var clonedCount = this.props.slides.length * 2; // cloned slides
-    var max = this.props.slides.length - 1 + clonedCount;
-    if (this.props.mode === "fade" && index >= max) {
-      index = min + 1;
-    }
-    this._updateIndex(index);
+    this.setState({
+      count: this.state.count + 1
+    });
+    this._updateIndex(this.state.index + 1);
     this._setTimer();
   }
   _setTimer () {
@@ -163,6 +160,7 @@ class ReactSCarousel extends Component {
       width           : width,
       slideWidth      : this.props.slideWidth || width,
       index           : this.state.index,
+      count           : this.state.count,
       duration        : this.props.duration,
       cssEase         : this.props.cssEase,
       loop            : this.loop.bind(this),

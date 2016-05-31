@@ -6,9 +6,9 @@ import ReactDOM from "react-dom";
 import ReactSCarousel from "./react-s-carousel.jsx";
 
 var list = [
-  { href: "http://github.com/seckie", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" },
-  { href: "http://github.com/seckie", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" },
-  { href: "http://github.com/seckie", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" },
+  { href: "http://github.com/seckie1", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" },
+  { href: "http://github.com/seckie2", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" },
+  { href: "http://github.com/seckie3", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" },
 ];
 
 class Carousel extends Component {

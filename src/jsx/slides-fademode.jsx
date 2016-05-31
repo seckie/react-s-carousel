@@ -13,13 +13,21 @@ class Slides extends Component {
       _.defer(this.props.loop);
     }
   }
+  onTransitionEnd (e) {
+    var el = e.currentTarget;
+    if (el.style.opacity == 0) {
+      el.style.display = "none";
+    }
+  }
   render () {
     var count = this.props.slides.length;
     var transition = this.props.enableTransition ? `opacity ${this.props.duration}ms ${this.props.cssEase}` : "none";
+    var index = this.props.index;
+    var prevIndex = index - 1 >= 0 ? index -1 : this.props.slides.length - 1;
     var slides = this.props.slides.map((slide, i) => {
-      var isPrev = this.props.index - 1 === i;
-      var isActive = this.props.index === i;
-      var isNext = this.props.index === i - 1 || (0 === i && this.props.index >= count - 1);
+      var isPrev = prevIndex === i;
+      var isActive = index === i;
+      var isNext = index === i - 1 || (0 === i && index >= count - 1);
       var cName = classnames("slide", {
         prev: isPrev,
         active: isActive,
@@ -31,13 +39,27 @@ class Slides extends Component {
         position: "absolute",
         top: 0,
         left: 0,
-        zIndex: count - i,
         opacity: isActive ? 1 : 0,
+        display: isPrev || isActive ? "block" : "none",
         transition: transition
       };
+      switch(true) {
+        case isPrev:
+          style.zIndex = this.props.count + 1;
+          break;
+        case isActive:
+          style.zIndex = this.props.count;
+          break;
+        case isNext:
+          style.zIndex = this.props.count - 1;
+          break;
+        default:
+          style.zIndex = 9999;
+      }
       return (
         <div key={`slide${i}`} className={cName}
-          style={style} onClick={this.props.onClickSlide}>
+          style={style} onClick={this.props.onClickSlide}
+          onTransitionEnd={this.onTransitionEnd.bind(this)}>
           {slide}
         </div>
       );
@@ -68,6 +90,7 @@ Slides.propTypes = {
     React.PropTypes.string
   ]),
   index          : React.PropTypes.number,
+  count          : React.PropTypes.number,
   duration       : React.PropTypes.number,
   cssEase        : React.PropTypes.string,
   loop           : React.PropTypes.func,
@@ -81,6 +104,7 @@ Slides.defaultProps = {
   width          : "auto",
   height         : "auto",
   index          : 0,
+  count          : 0,
   duration       : 500,
   cssEase        : "ease-in-out",
   loop           : function () {},
