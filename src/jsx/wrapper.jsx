@@ -33,10 +33,11 @@ class Carousel extends Component {
     var props = {
       slides: slides,
       autoPlay: this.state.autoPlay,
-      mode: this.props.mode
+      mode: this.props.mode,
     };
     props.slideWidth = this.props.slideWidth || undefined;
     props.width = this.props.width || 800;
+    props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
     return (
       <div>
         <ReactSCarousel {...props} />

@@ -54,9 +54,11 @@ class ReactSCarousel extends Component {
       playing: true,
       enableClick: true
     });
+    var index = this.state.index % 3;
+    var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
     clearTimeout(this.state.timer);
     this.setState({
-      timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+      timer: setTimeout(this._tick.bind(this), interval)
     });
   }
   _updateIndex (index, count) {
@@ -237,6 +239,7 @@ ReactSCarousel.propTypes = {
   arrows          : React.PropTypes.bool,
   autoPlay        : React.PropTypes.bool,
   autoPlayInterval: React.PropTypes.number,
+  autoPlayIntervals: React.PropTypes.arrayOf(React.PropTypes.number),
   cssEase         : React.PropTypes.string,
   dots            : React.PropTypes.bool,
   duration        : React.PropTypes.number,
@@ -258,6 +261,7 @@ ReactSCarousel.defaultProps = {
   arrows          : true,
   autoPlay        : true,
   autoPlayInterval: 3000,
+  autoPlayIntervals: [],
   cssEase         : "ease-in-out",
   dots            : true,
   duration        : 500,

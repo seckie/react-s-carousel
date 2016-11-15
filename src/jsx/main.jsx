@@ -16,11 +16,19 @@ class App extends Component {
     };
     return (
       <div style={{ position: "relative" }}>
-        <h2 style={hStyle}> mode="slide", width=600, slideWidth=200</h2>
+        <h2 style={hStyle}>
+         mode="slide", width=600, slideWidth=200
+        </h2>
         <Carousel mode="slide" width={600} slideWidth={200} />
-        <h2 style={hStyle}> mode="slide"</h2>
-        <Carousel mode="slide" />
-        <h2 style={hStyle}> mode="fade"</h2>
+
+        <h2 style={hStyle}>
+        mode="slide" autoPlayIntervals=[1000,5000,2000]
+        </h2>
+        <Carousel mode="slide" autoPlayIntervals={[1000,5000,2000]}/>
+
+        <h2 style={hStyle}>
+        mode="fade"
+        </h2>
         <Carousel mode="fade" />
       </div>
     );

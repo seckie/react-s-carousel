@@ -100,19 +100,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
-	          " mode=\"slide\", width=600, slideWidth=200"
+	          "mode=\"slide\", width=600, slideWidth=200"
 	        ),
 	        _react2.default.createElement(_wrapper2.default, { mode: "slide", width: 600, slideWidth: 200 }),
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
-	          " mode=\"slide\""
+	          "mode=\"slide\" autoPlayIntervals=[1000,5000,2000]"
 	        ),
-	        _react2.default.createElement(_wrapper2.default, { mode: "slide" }),
+	        _react2.default.createElement(_wrapper2.default, { mode: "slide", autoPlayIntervals: [1000, 5000, 2000] }),
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
-	          " mode=\"fade\""
+	          "mode=\"fade\""
 	        ),
 	        _react2.default.createElement(_wrapper2.default, { mode: "fade" })
 	      );
@@ -20153,6 +20153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	      props.slideWidth = this.props.slideWidth || undefined;
 	      props.width = this.props.width || 800;
+	      props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
 	      return _react2.default.createElement(
 	        "div",
 	        null,
@@ -20277,9 +20278,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playing: true,
 	        enableClick: true
 	      });
+	      var index = this.state.index % 3;
+	      var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
 	      clearTimeout(this.state.timer);
 	      this.setState({
-	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	        timer: setTimeout(this._tick.bind(this), interval)
 	      });
 	    }
 	  }, {
@@ -20493,6 +20496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  arrows: _react2.default.PropTypes.bool,
 	  autoPlay: _react2.default.PropTypes.bool,
 	  autoPlayInterval: _react2.default.PropTypes.number,
+	  autoPlayIntervals: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.number),
 	  cssEase: _react2.default.PropTypes.string,
 	  dots: _react2.default.PropTypes.bool,
 	  duration: _react2.default.PropTypes.number,
@@ -20508,6 +20512,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  arrows: true,
 	  autoPlay: true,
 	  autoPlayInterval: 3000,
+	  autoPlayIntervals: [],
 	  cssEase: "ease-in-out",
 	  dots: true,
 	  duration: 500,
