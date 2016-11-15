@@ -174,7 +174,8 @@ class ReactSCarousel extends Component {
       onClickSlide    : this.onClickSlide.bind(this),
       onTransitionEnd : this.onTransitionEnd.bind(this),
       enableTransition: this.state.enableTransition,
-      mode            : this.props.mode
+      mode            : this.props.mode,
+      onChange        : this.props.onChange
     };
 
     if (this.props.dots) {
@@ -258,7 +259,8 @@ ReactSCarousel.propTypes = {
     PropTypes.string
   ]),
   mode             : PropTypes.string,
-  backgroundColor  : PropTypes.string
+  backgroundColor  : PropTypes.string,
+  onChange         : PropTypes.func
 };
 ReactSCarousel.defaultProps = {
   arrows           : true,
@@ -273,7 +275,8 @@ ReactSCarousel.defaultProps = {
   slides           : [],
   width            : "auto",
   mode             : "slide",
-  backgroundColor  : "white"
+  backgroundColor  : "white",
+  onChange         : function () {}
 };
 
 export default ReactSCarousel;

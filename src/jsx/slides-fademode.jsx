@@ -7,6 +7,9 @@ class Slides extends Component {
   constructor (props) {
     super(props);
   }
+  onTransitionEnd () {
+    this.props.onChange(this.props);
+  }
   render () {
     var count = this.props.slides.length;
     var transition = `opacity ${this.props.duration}ms ${this.props.cssEase}`;
@@ -58,7 +61,8 @@ class Slides extends Component {
       backgroundColor: this.props.backgroundColor
     };
     return (
-      <div className="scarousel-slides" style={slidesStyle}>
+      <div className="scarousel-slides" style={slidesStyle}
+        onTransitionEnd={this.onTransitionEnd.bind(this)}>
         {slides}
       </div>
     );
@@ -81,7 +85,8 @@ Slides.propTypes = {
   cssEase        : PropTypes.string,
   onClickSlide   : PropTypes.func,
   mode           : PropTypes.string,
-  backgroundColor: PropTypes.string
+  backgroundColor: PropTypes.string,
+  onChange       : PropTypes.func
 };
 Slides.defaultProps = {
   slides         : [],
@@ -93,7 +98,8 @@ Slides.defaultProps = {
   cssEase        : "ease-in-out",
   onClickSlide   : function () {},
   mode           : "slide",
-  backgroundColor: "white"
+  backgroundColor: "white",
+  onChange       : function () {}
 };
 
 

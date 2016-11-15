@@ -13,6 +13,10 @@ class Slides extends Component {
       _.defer(this.props.loop);
     }
   }
+  onTransitionEnd () {
+    this.props.onChange(this.props);
+    this.props.onTransitionEnd();
+  }
   render () {
     var slides = this.props.slides.map((slide, i) => {
       var cName = classnames("slide", {
@@ -37,7 +41,7 @@ class Slides extends Component {
     };
     return (
       <div className="scarousel-slides" style={slidesStyle}
-        onTransitionEnd={this.props.onTransitionEnd}>
+        onTransitionEnd={this.onTransitionEnd.bind(this)}>
         {slides}
       </div>
     );
@@ -60,6 +64,7 @@ Slides.propTypes = {
   loop           : PropTypes.func,
   onClickSlide   : PropTypes.func,
   onTransitionEnd: PropTypes.func,
+  onChange       : PropTypes.func
 };
 Slides.defaultProps = {
   slides         : [],
@@ -71,6 +76,7 @@ Slides.defaultProps = {
   loop           : function () {},
   onClickSlide   : function () {},
   onTransitionEnd: function () {},
+  onChange       : function () {}
 };
 
 

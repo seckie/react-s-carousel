@@ -300,7 +300,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onClickSlide: this.onClickSlide.bind(this),
 	        onTransitionEnd: this.onTransitionEnd.bind(this),
 	        enableTransition: this.state.enableTransition,
-	        mode: this.props.mode
+	        mode: this.props.mode,
+	        onChange: this.props.onChange
 	      };
 
 	      if (this.props.dots) {
@@ -387,7 +388,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	  mode: _react.PropTypes.string,
-	  backgroundColor: _react.PropTypes.string
+	  backgroundColor: _react.PropTypes.string,
+	  onChange: _react.PropTypes.func
 	};
 	ReactSCarousel.defaultProps = {
 	  arrows: true,
@@ -402,7 +404,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  slides: [],
 	  width: "auto",
 	  mode: "slide",
-	  backgroundColor: "white"
+	  backgroundColor: "white",
+	  onChange: function onChange() {}
 	};
 
 	exports.default = ReactSCarousel;
@@ -480,6 +483,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	  }, {
+	    key: "onTransitionEnd",
+	    value: function onTransitionEnd() {
+	      this.props.onChange(this.props);
+	      this.props.onTransitionEnd();
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      var _this2 = this;
@@ -508,7 +517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "scarousel-slides", style: slidesStyle,
-	          onTransitionEnd: this.props.onTransitionEnd },
+	          onTransitionEnd: this.onTransitionEnd.bind(this) },
 	        slides
 	      );
 	    }
@@ -526,7 +535,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  cssEase: _react.PropTypes.string,
 	  loop: _react.PropTypes.func,
 	  onClickSlide: _react.PropTypes.func,
-	  onTransitionEnd: _react.PropTypes.func
+	  onTransitionEnd: _react.PropTypes.func,
+	  onChange: _react.PropTypes.func
 	};
 	Slides.defaultProps = {
 	  slides: [],
@@ -537,7 +547,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  cssEase: "ease-in-out",
 	  loop: function loop() {},
 	  onClickSlide: function onClickSlide() {},
-	  onTransitionEnd: function onTransitionEnd() {}
+	  onTransitionEnd: function onTransitionEnd() {},
+	  onChange: function onChange() {}
 	};
 
 	exports.default = Slides;
@@ -557,10 +568,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
-
-	var _lodash = __webpack_require__(3);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
 
 	var _classnames = __webpack_require__(4);
 
@@ -584,19 +591,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Slides, [{
-	    key: "componentDidUpdate",
-	    value: function componentDidUpdate(prevProps) {
-	      if (!this.props.enableTransition) {
-	        _lodash2.default.defer(this.props.loop);
-	      }
-	    }
-	  }, {
 	    key: "onTransitionEnd",
-	    value: function onTransitionEnd(e) {
-	      var el = e.currentTarget;
-	      if (el.style.opacity == 0) {
-	        el.style.display = "none";
-	      }
+	    value: function onTransitionEnd() {
+	      this.props.onChange(this.props);
 	    }
 	  }, {
 	    key: "render",
@@ -604,7 +601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this2 = this;
 
 	      var count = this.props.slides.length;
-	      var transition = this.props.enableTransition ? "opacity " + this.props.duration + "ms " + this.props.cssEase : "none";
+	      var transition = "opacity " + this.props.duration + "ms " + this.props.cssEase;
 	      var index = this.props.index;
 	      var prevIndex = index - 1 >= 0 ? index - 1 : this.props.slides.length - 1;
 	      var slides = this.props.slides.map(function (slide, i) {
@@ -622,9 +619,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          position: "absolute",
 	          top: 0,
 	          left: 0,
-	          opacity: isActive ? 1 : 0,
-	          display: isPrev || isActive ? "block" : "none",
-	          transition: isPrev || isActive || isNext ? transition : "none"
+	          opacity: isPrev || isNext ? 0 : 1,
+	          transition: transition
 	        };
 	        switch (true) {
 	          case isPrev:
@@ -637,13 +633,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            style.zIndex = _this2.props.count - 1;
 	            break;
 	          default:
-	            style.zIndex = 9999;
+	            style.zIndex = -9999;
 	        }
 	        return _react2.default.createElement(
 	          "div",
 	          { key: "slide" + i, className: cName,
-	            style: style, onClick: _this2.props.onClickSlide,
-	            onTransitionEnd: _this2.onTransitionEnd.bind(_this2) },
+	            style: style, onClick: _this2.props.onClickSlide },
 	          slide
 	        );
 	      });
@@ -656,7 +651,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 	      return _react2.default.createElement(
 	        "div",
-	        { className: "scarousel-slides", style: slidesStyle },
+	        { className: "scarousel-slides", style: slidesStyle,
+	          onTransitionEnd: this.onTransitionEnd.bind(this) },
 	        slides
 	      );
 	    }
@@ -673,11 +669,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  count: _react.PropTypes.number,
 	  duration: _react.PropTypes.number,
 	  cssEase: _react.PropTypes.string,
-	  loop: _react.PropTypes.func,
 	  onClickSlide: _react.PropTypes.func,
-	  onTransitionEnd: _react.PropTypes.func,
 	  mode: _react.PropTypes.string,
-	  backgroundColor: _react.PropTypes.string
+	  backgroundColor: _react.PropTypes.string,
+	  onChange: _react.PropTypes.func
 	};
 	Slides.defaultProps = {
 	  slides: [],
@@ -687,11 +682,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  count: 0,
 	  duration: 500,
 	  cssEase: "ease-in-out",
-	  loop: function loop() {},
 	  onClickSlide: function onClickSlide() {},
-	  onTransitionEnd: function onTransitionEnd() {},
 	  mode: "slide",
-	  backgroundColor: "white"
+	  backgroundColor: "white",
+	  onChange: function onChange() {}
 	};
 
 	exports.default = Slides;
