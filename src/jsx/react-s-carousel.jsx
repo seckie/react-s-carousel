@@ -157,7 +157,10 @@ class ReactSCarousel extends Component {
     this.setState(state);
   }
   render () {
-    var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
+    if (this.props.width === "auto" && !this.state.width) {
+      return <div className="scarousel" />;
+    }
+    var width = this.props.width === "auto" ? this.state.width : this.props.width;
     var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
     var slidesProps = {
       slides          : slides,

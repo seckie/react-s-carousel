@@ -67,7 +67,7 @@ class Carousel extends Component {
       mode: this.props.mode,
     };
     props.slideWidth = this.props.slideWidth || undefined;
-    props.width = this.props.width || 800;
+    props.width = this.props.width || undefined;
     props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
     return (
       <div>

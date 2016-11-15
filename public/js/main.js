@@ -163,7 +163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        mode: this.props.mode
 	      };
 	      props.slideWidth = this.props.slideWidth || undefined;
-	      props.width = this.props.width || 800;
+	      props.width = this.props.width || undefined;
 	      props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
 	      return _react2.default.createElement(
 	        "div",
@@ -20371,7 +20371,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _this2 = this;
 
-	      var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
+	      if (this.props.width === "auto" && !this.state.width) {
+	        return _react2.default.createElement("div", { className: "scarousel" });
+	      }
+	      var width = this.props.width === "auto" ? this.state.width : this.props.width;
 	      var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
 	      var slidesProps = {
 	        slides: slides,
