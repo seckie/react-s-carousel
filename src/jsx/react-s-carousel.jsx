@@ -113,17 +113,21 @@ class ReactSCarousel extends Component {
     }
   }
   onMouseEnterSlide (e) {
-    this.setState({
-      playing: false,
-      enableClick: false
-    });
+    if (this.props.autoPlay) {
+      this.setState({
+        playing: false,
+        enableClick: false
+      });
+    }
   }
   onMouseLeaveSlide (e) {
-    this.setState({
-      playing: true,
-      enableClick: true
-    });
-    this._setTimer();
+    if (this.props.autoPlay) {
+      this.setState({
+        playing: true,
+        enableClick: true
+      });
+      this._setTimer();
+    }
   }
   loop () {
     this.setState({
