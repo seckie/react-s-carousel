@@ -1,13 +1,13 @@
 "use strict";
 
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
 import _ from "lodash";
 import classnames from "classnames";
 import Slides from "./slides.jsx";
 import SlidesFadeMode from "./slides-fademode.jsx";
 
-var prefix = "scarousel";
+var PREFIX = "scarousel";
 
 class ReactSCarousel extends Component {
   constructor (props) {
@@ -182,7 +182,7 @@ class ReactSCarousel extends Component {
         var count = this.props.slides.length;
         var i2 = i % count;
         var stateIndex = this.state.index % count;
-        var cName = classnames(`${prefix}-dot`, {
+        var cName = classnames(`${PREFIX}-dot`, {
           active: stateIndex === i2
         });
         return (
@@ -194,12 +194,12 @@ class ReactSCarousel extends Component {
     }
     if (this.props.arrows) {
       var prevArrow = (
-        <button className={`${prefix}-arrow prev`}
+        <button className={`${PREFIX}-arrow prev`}
           onClick={this.onClickPrev.bind(this)}>
           Prev</button>
       );
       var nextArrow = (
-        <button className={`${prefix}-arrow next`}
+        <button className={`${PREFIX}-arrow next`}
           onClick={this.onClickNext.bind(this)}>
           Next</button>
       );
@@ -227,7 +227,7 @@ class ReactSCarousel extends Component {
         {dummySlide}
         {prevArrow}
         {nextArrow}
-        <div className={`${prefix}-dots`}>
+        <div className={`${PREFIX}-dots`}>
           {dots}
         </div>
       </div>
@@ -236,41 +236,41 @@ class ReactSCarousel extends Component {
 }
 
 ReactSCarousel.propTypes = {
-  arrows          : React.PropTypes.bool,
-  autoPlay        : React.PropTypes.bool,
-  autoPlayInterval: React.PropTypes.number,
-  autoPlayIntervals: React.PropTypes.arrayOf(React.PropTypes.number),
-  cssEase         : React.PropTypes.string,
-  dots            : React.PropTypes.bool,
-  duration        : React.PropTypes.number,
-  initialSlide    : React.PropTypes.number,
-  pauseOnAction   : React.PropTypes.bool,
-  slides          : React.PropTypes.array,
-  width           : React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string
+  arrows           : PropTypes.bool,
+  autoPlay         : PropTypes.bool,
+  autoPlayInterval : PropTypes.number,
+  autoPlayIntervals: PropTypes.arrayOf(PropTypes.number),
+  cssEase          : PropTypes.string,
+  dots             : PropTypes.bool,
+  duration         : PropTypes.number,
+  initialSlide     : PropTypes.number,
+  pauseOnAction    : PropTypes.bool,
+  slides           : PropTypes.array,
+  width            : PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
   ]),
-  slideWidth      : React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string
+  slideWidth       : PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
   ]),
-  mode            : React.PropTypes.string,
-  backgroundColor : React.PropTypes.string
+  mode             : PropTypes.string,
+  backgroundColor  : PropTypes.string
 };
 ReactSCarousel.defaultProps = {
-  arrows          : true,
-  autoPlay        : true,
-  autoPlayInterval: 3000,
+  arrows           : true,
+  autoPlay         : true,
+  autoPlayInterval : 3000,
   autoPlayIntervals: [],
-  cssEase         : "ease-in-out",
-  dots            : true,
-  duration        : 500,
-  initialSlide    : 0,
-  pauseOnAction   : true,
-  slides          : [],
-  width           : "auto",
-  mode            : "slide",
-  backgroundColor : "white"
+  cssEase          : "ease-in-out",
+  dots             : true,
+  duration         : 500,
+  initialSlide     : 0,
+  pauseOnAction    : true,
+  slides           : [],
+  width            : "auto",
+  mode             : "slide",
+  backgroundColor  : "white"
 };
 
 export default ReactSCarousel;
