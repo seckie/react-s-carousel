@@ -229,19 +229,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "onMouseEnterSlide",
 	    value: function onMouseEnterSlide(e) {
-	      this.setState({
-	        playing: false,
-	        enableClick: false
-	      });
+	      if (this.props.autoPlay) {
+	        this.setState({
+	          playing: false,
+	          enableClick: false
+	        });
+	      }
 	    }
 	  }, {
 	    key: "onMouseLeaveSlide",
 	    value: function onMouseLeaveSlide(e) {
-	      this.setState({
-	        playing: true,
-	        enableClick: true
-	      });
-	      this._setTimer();
+	      if (this.props.autoPlay) {
+	        this.setState({
+	          playing: true,
+	          enableClick: true
+	        });
+	        this._setTimer();
+	      }
 	    }
 	  }, {
 	    key: "loop",
