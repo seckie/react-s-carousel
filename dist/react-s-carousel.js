@@ -283,7 +283,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function render() {
 	      var _this2 = this;
 
-	      var width = this.state.width && this.props.width === "auto" ? this.state.width : this.props.width;
+	      if (this.props.width === "auto" && !this.state.width) {
+	        return _react2.default.createElement("div", { className: "scarousel" });
+	      }
+	      var width = this.props.width === "auto" ? this.state.width : this.props.width;
 	      var slides = [].concat(this.props.slides, this.props.slides, this.props.slides);
 	      var slidesProps = {
 	        slides: slides,
