@@ -113,6 +113,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(Carousel, { mode: "slide", autoPlayIntervals: [1000, 5000, 2000],
 	          onChange: function onChange(props) {
 	            console.info(props);
+	          },
+	          onInit: function onInit(props) {
+	            console.info('init ', props);
 	          } }),
 	        _react2.default.createElement(
 	          "h2",
@@ -20391,7 +20394,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        onTransitionEnd: this.onTransitionEnd.bind(this),
 	        enableTransition: this.state.enableTransition,
 	        mode: this.props.mode,
-	        onChange: this.props.onChange
+	        onChange: this.props.onChange,
+	        onInit: this.props.onInit
 	      };
 
 	      if (this.props.dots) {
@@ -20479,7 +20483,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	  mode: _react.PropTypes.string,
 	  backgroundColor: _react.PropTypes.string,
-	  onChange: _react.PropTypes.func
+	  onChange: _react.PropTypes.func,
+	  onInit: _react.PropTypes.func
 	};
 	ReactSCarousel.defaultProps = {
 	  arrows: true,
@@ -20495,7 +20500,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  width: "auto",
 	  mode: "slide",
 	  backgroundColor: "white",
-	  onChange: function onChange() {}
+	  onChange: function onChange() {},
+	  onInit: function onInit() {}
 	};
 
 	exports.default = ReactSCarousel;
@@ -36646,6 +36652,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Slides, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      this.props.onInit(this.props);
+	    }
+	  }, {
 	    key: "componentDidUpdate",
 	    value: function componentDidUpdate(prevProps) {
 	      if (!this.props.enableTransition) {
@@ -36706,7 +36717,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  loop: _react.PropTypes.func,
 	  onClickSlide: _react.PropTypes.func,
 	  onTransitionEnd: _react.PropTypes.func,
-	  onChange: _react.PropTypes.func
+	  onChange: _react.PropTypes.func,
+	  onInit: _react.PropTypes.func
 	};
 	Slides.defaultProps = {
 	  slides: [],
@@ -36718,7 +36730,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  loop: function loop() {},
 	  onClickSlide: function onClickSlide() {},
 	  onTransitionEnd: function onTransitionEnd() {},
-	  onChange: function onChange() {}
+	  onChange: function onChange() {},
+	  onInit: function onInit() {}
 	};
 
 	exports.default = Slides;
@@ -36761,6 +36774,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Slides, [{
+	    key: "componentDidMount",
+	    value: function componentDidMount() {
+	      this.props.onInit(this.props);
+	    }
+	  }, {
 	    key: "onTransitionEnd",
 	    value: function onTransitionEnd() {
 	      this.props.onChange(this.props);
@@ -36842,7 +36860,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onClickSlide: _react.PropTypes.func,
 	  mode: _react.PropTypes.string,
 	  backgroundColor: _react.PropTypes.string,
-	  onChange: _react.PropTypes.func
+	  onChange: _react.PropTypes.func,
+	  onInit: _react.PropTypes.func
 	};
 	Slides.defaultProps = {
 	  slides: [],
@@ -36855,7 +36874,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onClickSlide: function onClickSlide() {},
 	  mode: "slide",
 	  backgroundColor: "white",
-	  onChange: function onChange() {}
+	  onChange: function onChange() {},
+	  onInit: function onInit() {}
 	};
 
 	exports.default = Slides;
