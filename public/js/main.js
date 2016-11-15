@@ -20242,7 +20242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playing: true,
 	        enableClick: true
 	      });
-	      var index = this.state.index % 3;
+	      var index = this.state.index % this.props.slides.length;
 	      var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
 	      clearTimeout(this.state.timer);
 	      this.setState({
