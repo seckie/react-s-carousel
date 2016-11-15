@@ -31,7 +31,8 @@ class App extends Component {
         <h2 style={hStyle}>
         mode="slide" autoPlayIntervals=[1000,5000,2000]
         </h2>
-        <Carousel mode="slide" autoPlayIntervals={[1000,5000,2000]}/>
+        <Carousel mode="slide" autoPlayIntervals={[1000,5000,2000]}
+          onChange={function(props) { console.info(props); }}/>
 
         <h2 style={hStyle}>
         mode="fade"
@@ -61,17 +62,12 @@ class Carousel extends Component {
         <img src={slide.imgSrc} alt={slide.imgAlt} width={this.props.slideWidth} /></a>
       );
     });
-    var props = {
-      slides: slides,
-      autoPlay: this.state.autoPlay,
-      mode: this.props.mode,
-    };
-    props.slideWidth = this.props.slideWidth || undefined;
-    props.width = this.props.width || undefined;
-    props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
+    var props = Object.assign({}, this.props);
+    props.slides = slides;
+    props.autoPlay = this.state.autoPlay;
     return (
       <div>
-        <ReactSCarousel {...props} />
+      <ReactSCarousel {...props} />
         <button className="toggle" onClick={this.toggleAutoPlay.bind(this)}>Toggle autoPlay</button>
       </div>
     );
