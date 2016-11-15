@@ -3,7 +3,14 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
-import Carousel from "./wrapper.jsx";
+import ReactSCarousel from "./react-s-carousel.jsx";
+
+var list = [
+  { href: "http://github.com/seckie1", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" },
+  { href: "http://github.com/seckie2", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" },
+  { href: "http://github.com/seckie3", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" },
+];
+
 
 class App extends Component {
   constructor (props) {
@@ -16,12 +23,56 @@ class App extends Component {
     };
     return (
       <div style={{ position: "relative" }}>
-        <h2 style={hStyle}> mode="slide", width=600, slideWidth=200</h2>
+        <h2 style={hStyle}>
+         mode="slide", width=600, slideWidth=200
+        </h2>
         <Carousel mode="slide" width={600} slideWidth={200} />
-        <h2 style={hStyle}> mode="slide"</h2>
-        <Carousel mode="slide" />
-        <h2 style={hStyle}> mode="fade"</h2>
+
+        <h2 style={hStyle}>
+        mode="slide" autoPlayIntervals=[1000,5000,2000]
+        </h2>
+        <Carousel mode="slide" autoPlayIntervals={[1000,5000,2000]}/>
+
+        <h2 style={hStyle}>
+        mode="fade"
+        </h2>
         <Carousel mode="fade" />
+      </div>
+    );
+  }
+}
+
+class Carousel extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      autoPlay: true
+    };
+  }
+  toggleAutoPlay () {
+    this.setState({
+      autoPlay: !this.state.autoPlay
+    });
+  }
+  render () {
+    var slides = list.map((slide, i) => {
+      return (
+        <a href={slide.href} key={`slide${i}`}>
+        <img src={slide.imgSrc} alt={slide.imgAlt} width={this.props.slideWidth} /></a>
+      );
+    });
+    var props = {
+      slides: slides,
+      autoPlay: this.state.autoPlay,
+      mode: this.props.mode,
+    };
+    props.slideWidth = this.props.slideWidth || undefined;
+    props.width = this.props.width || 800;
+    props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
+    return (
+      <div>
+        <ReactSCarousel {...props} />
+        <button className="toggle" onClick={this.toggleAutoPlay.bind(this)}>Toggle autoPlay</button>
       </div>
     );
   }

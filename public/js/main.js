@@ -66,9 +66,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _wrapper = __webpack_require__(166);
+	var _reactSCarousel = __webpack_require__(166);
 
-	var _wrapper2 = _interopRequireDefault(_wrapper);
+	var _reactSCarousel2 = _interopRequireDefault(_reactSCarousel);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -77,6 +77,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var list = [{ href: "http://github.com/seckie1", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie2", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie3", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
 
 	var App = function (_Component) {
 	  _inherits(App, _Component);
@@ -100,26 +102,83 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
-	          " mode=\"slide\", width=600, slideWidth=200"
+	          "mode=\"slide\", width=600, slideWidth=200"
 	        ),
-	        _react2.default.createElement(_wrapper2.default, { mode: "slide", width: 600, slideWidth: 200 }),
+	        _react2.default.createElement(Carousel, { mode: "slide", width: 600, slideWidth: 200 }),
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
-	          " mode=\"slide\""
+	          "mode=\"slide\" autoPlayIntervals=[1000,5000,2000]"
 	        ),
-	        _react2.default.createElement(_wrapper2.default, { mode: "slide" }),
+	        _react2.default.createElement(Carousel, { mode: "slide", autoPlayIntervals: [1000, 5000, 2000] }),
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
-	          " mode=\"fade\""
+	          "mode=\"fade\""
 	        ),
-	        _react2.default.createElement(_wrapper2.default, { mode: "fade" })
+	        _react2.default.createElement(Carousel, { mode: "fade" })
 	      );
 	    }
 	  }]);
 
 	  return App;
+	}(_react.Component);
+
+	var Carousel = function (_Component2) {
+	  _inherits(Carousel, _Component2);
+
+	  function Carousel(props) {
+	    _classCallCheck(this, Carousel);
+
+	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Carousel).call(this, props));
+
+	    _this2.state = {
+	      autoPlay: true
+	    };
+	    return _this2;
+	  }
+
+	  _createClass(Carousel, [{
+	    key: "toggleAutoPlay",
+	    value: function toggleAutoPlay() {
+	      this.setState({
+	        autoPlay: !this.state.autoPlay
+	      });
+	    }
+	  }, {
+	    key: "render",
+	    value: function render() {
+	      var _this3 = this;
+
+	      var slides = list.map(function (slide, i) {
+	        return _react2.default.createElement(
+	          "a",
+	          { href: slide.href, key: "slide" + i },
+	          _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt, width: _this3.props.slideWidth })
+	        );
+	      });
+	      var props = {
+	        slides: slides,
+	        autoPlay: this.state.autoPlay,
+	        mode: this.props.mode
+	      };
+	      props.slideWidth = this.props.slideWidth || undefined;
+	      props.width = this.props.width || 800;
+	      props.autoPlayIntervals = this.props.autoPlayIntervals || undefined;
+	      return _react2.default.createElement(
+	        "div",
+	        null,
+	        _react2.default.createElement(_reactSCarousel2.default, props),
+	        _react2.default.createElement(
+	          "button",
+	          { className: "toggle", onClick: this.toggleAutoPlay.bind(this) },
+	          "Toggle autoPlay"
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Carousel;
 	}(_react.Component);
 
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById("app"));
@@ -20099,111 +20158,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactSCarousel = __webpack_require__(167);
-
-	var _reactSCarousel2 = _interopRequireDefault(_reactSCarousel);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var list = [{ href: "http://github.com/seckie1", imgSrc: "img/slide1.png", imgAlt: "Slide1 Alt" }, { href: "http://github.com/seckie2", imgSrc: "img/slide2.png", imgAlt: "Slide2 Alt" }, { href: "http://github.com/seckie3", imgSrc: "img/slide3.png", imgAlt: "Slide3 Alt" }];
-
-	var Carousel = function (_Component) {
-	  _inherits(Carousel, _Component);
-
-	  function Carousel(props) {
-	    _classCallCheck(this, Carousel);
-
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Carousel).call(this, props));
-
-	    _this.state = {
-	      autoPlay: true
-	    };
-	    return _this;
-	  }
-
-	  _createClass(Carousel, [{
-	    key: "toggleAutoPlay",
-	    value: function toggleAutoPlay() {
-	      this.setState({
-	        autoPlay: !this.state.autoPlay
-	      });
-	    }
-	  }, {
-	    key: "render",
-	    value: function render() {
-	      var _this2 = this;
-
-	      var slides = list.map(function (slide, i) {
-	        return _react2.default.createElement(
-	          "a",
-	          { href: slide.href, key: "slide" + i },
-	          _react2.default.createElement("img", { src: slide.imgSrc, alt: slide.imgAlt, width: _this2.props.slideWidth })
-	        );
-	      });
-	      var props = {
-	        slides: slides,
-	        autoPlay: this.state.autoPlay,
-	        mode: this.props.mode
-	      };
-	      props.slideWidth = this.props.slideWidth || undefined;
-	      props.width = this.props.width || 800;
-	      return _react2.default.createElement(
-	        "div",
-	        null,
-	        _react2.default.createElement(_reactSCarousel2.default, props),
-	        _react2.default.createElement(
-	          "button",
-	          { className: "toggle", onClick: this.toggleAutoPlay.bind(this) },
-	          "Toggle autoPlay"
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Carousel;
-	}(_react.Component);
-
-	exports.default = Carousel;
-
-/***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(32);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _lodash = __webpack_require__(168);
+	var _lodash = __webpack_require__(167);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(170);
+	var _classnames = __webpack_require__(169);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _slides = __webpack_require__(171);
+	var _slides = __webpack_require__(170);
 
 	var _slides2 = _interopRequireDefault(_slides);
 
-	var _slidesFademode = __webpack_require__(172);
+	var _slidesFademode = __webpack_require__(171);
 
 	var _slidesFademode2 = _interopRequireDefault(_slidesFademode);
 
@@ -20215,7 +20182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var prefix = "scarousel";
+	var PREFIX = "scarousel";
 
 	var ReactSCarousel = function (_Component) {
 	  _inherits(ReactSCarousel, _Component);
@@ -20277,9 +20244,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playing: true,
 	        enableClick: true
 	      });
+	      var index = this.state.index % 3;
+	      var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
 	      clearTimeout(this.state.timer);
 	      this.setState({
-	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	        timer: setTimeout(this._tick.bind(this), interval)
 	      });
 	    }
 	  }, {
@@ -20427,7 +20396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var count = _this2.props.slides.length;
 	          var i2 = i % count;
 	          var stateIndex = _this2.state.index % count;
-	          var cName = (0, _classnames2.default)(prefix + "-dot", {
+	          var cName = (0, _classnames2.default)(PREFIX + "-dot", {
 	            active: stateIndex === i2
 	          });
 	          return _react2.default.createElement(
@@ -20442,13 +20411,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.arrows) {
 	        var prevArrow = _react2.default.createElement(
 	          "button",
-	          { className: prefix + "-arrow prev",
+	          { className: PREFIX + "-arrow prev",
 	            onClick: this.onClickPrev.bind(this) },
 	          "Prev"
 	        );
 	        var nextArrow = _react2.default.createElement(
 	          "button",
-	          { className: prefix + "-arrow next",
+	          { className: PREFIX + "-arrow next",
 	            onClick: this.onClickNext.bind(this) },
 	          "Next"
 	        );
@@ -20479,7 +20448,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        nextArrow,
 	        _react2.default.createElement(
 	          "div",
-	          { className: prefix + "-dots" },
+	          { className: PREFIX + "-dots" },
 	          dots
 	        )
 	      );
@@ -20490,24 +20459,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	ReactSCarousel.propTypes = {
-	  arrows: _react2.default.PropTypes.bool,
-	  autoPlay: _react2.default.PropTypes.bool,
-	  autoPlayInterval: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string,
-	  dots: _react2.default.PropTypes.bool,
-	  duration: _react2.default.PropTypes.number,
-	  initialSlide: _react2.default.PropTypes.number,
-	  pauseOnAction: _react2.default.PropTypes.bool,
-	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  slideWidth: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  mode: _react2.default.PropTypes.string,
-	  backgroundColor: _react2.default.PropTypes.string
+	  arrows: _react.PropTypes.bool,
+	  autoPlay: _react.PropTypes.bool,
+	  autoPlayInterval: _react.PropTypes.number,
+	  autoPlayIntervals: _react.PropTypes.arrayOf(_react.PropTypes.number),
+	  cssEase: _react.PropTypes.string,
+	  dots: _react.PropTypes.bool,
+	  duration: _react.PropTypes.number,
+	  initialSlide: _react.PropTypes.number,
+	  pauseOnAction: _react.PropTypes.bool,
+	  slides: _react.PropTypes.array,
+	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  mode: _react.PropTypes.string,
+	  backgroundColor: _react.PropTypes.string
 	};
 	ReactSCarousel.defaultProps = {
 	  arrows: true,
 	  autoPlay: true,
 	  autoPlayInterval: 3000,
+	  autoPlayIntervals: [],
 	  cssEase: "ease-in-out",
 	  dots: true,
 	  duration: 500,
@@ -20522,7 +20493,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = ReactSCarousel;
 
 /***/ },
-/* 168 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -36553,10 +36524,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(169)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(168)(module), (function() { return this; }())))
 
 /***/ },
-/* 169 */
+/* 168 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -36572,7 +36543,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 170 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -36626,7 +36597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 171 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36641,11 +36612,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(168);
+	var _lodash = __webpack_require__(167);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(170);
+	var _classnames = __webpack_require__(169);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -36712,15 +36683,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	Slides.propTypes = {
-	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  slideWidth: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  index: _react2.default.PropTypes.number,
-	  duration: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string,
-	  loop: _react2.default.PropTypes.func,
-	  onClickSlide: _react2.default.PropTypes.func,
-	  onTransitionEnd: _react2.default.PropTypes.func
+	  slides: _react.PropTypes.array,
+	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  index: _react.PropTypes.number,
+	  duration: _react.PropTypes.number,
+	  cssEase: _react.PropTypes.string,
+	  loop: _react.PropTypes.func,
+	  onClickSlide: _react.PropTypes.func,
+	  onTransitionEnd: _react.PropTypes.func
 	};
 	Slides.defaultProps = {
 	  slides: [],
@@ -36737,7 +36708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Slides;
 
 /***/ },
-/* 172 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -36752,11 +36723,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(168);
+	var _lodash = __webpack_require__(167);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _classnames = __webpack_require__(170);
+	var _classnames = __webpack_require__(169);
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -36860,18 +36831,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	Slides.propTypes = {
-	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  height: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  index: _react2.default.PropTypes.number,
-	  count: _react2.default.PropTypes.number,
-	  duration: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string,
-	  loop: _react2.default.PropTypes.func,
-	  onClickSlide: _react2.default.PropTypes.func,
-	  onTransitionEnd: _react2.default.PropTypes.func,
-	  mode: _react2.default.PropTypes.string,
-	  backgroundColor: _react2.default.PropTypes.string
+	  slides: _react.PropTypes.array,
+	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  height: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  index: _react.PropTypes.number,
+	  count: _react.PropTypes.number,
+	  duration: _react.PropTypes.number,
+	  cssEase: _react.PropTypes.string,
+	  loop: _react.PropTypes.func,
+	  onClickSlide: _react.PropTypes.func,
+	  onTransitionEnd: _react.PropTypes.func,
+	  mode: _react.PropTypes.string,
+	  backgroundColor: _react.PropTypes.string
 	};
 	Slides.defaultProps = {
 	  slides: [],

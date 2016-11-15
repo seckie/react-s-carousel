@@ -94,7 +94,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var prefix = "scarousel";
+	var PREFIX = "scarousel";
 
 	var ReactSCarousel = function (_Component) {
 	  _inherits(ReactSCarousel, _Component);
@@ -156,9 +156,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        playing: true,
 	        enableClick: true
 	      });
+	      var index = this.state.index % 3;
+	      var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
 	      clearTimeout(this.state.timer);
 	      this.setState({
-	        timer: setTimeout(this._tick.bind(this), this.props.autoPlayInterval)
+	        timer: setTimeout(this._tick.bind(this), interval)
 	      });
 	    }
 	  }, {
@@ -306,7 +308,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          var count = _this2.props.slides.length;
 	          var i2 = i % count;
 	          var stateIndex = _this2.state.index % count;
-	          var cName = (0, _classnames2.default)(prefix + "-dot", {
+	          var cName = (0, _classnames2.default)(PREFIX + "-dot", {
 	            active: stateIndex === i2
 	          });
 	          return _react2.default.createElement(
@@ -321,13 +323,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.arrows) {
 	        var prevArrow = _react2.default.createElement(
 	          "button",
-	          { className: prefix + "-arrow prev",
+	          { className: PREFIX + "-arrow prev",
 	            onClick: this.onClickPrev.bind(this) },
 	          "Prev"
 	        );
 	        var nextArrow = _react2.default.createElement(
 	          "button",
-	          { className: prefix + "-arrow next",
+	          { className: PREFIX + "-arrow next",
 	            onClick: this.onClickNext.bind(this) },
 	          "Next"
 	        );
@@ -358,7 +360,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        nextArrow,
 	        _react2.default.createElement(
 	          "div",
-	          { className: prefix + "-dots" },
+	          { className: PREFIX + "-dots" },
 	          dots
 	        )
 	      );
@@ -369,24 +371,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	ReactSCarousel.propTypes = {
-	  arrows: _react2.default.PropTypes.bool,
-	  autoPlay: _react2.default.PropTypes.bool,
-	  autoPlayInterval: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string,
-	  dots: _react2.default.PropTypes.bool,
-	  duration: _react2.default.PropTypes.number,
-	  initialSlide: _react2.default.PropTypes.number,
-	  pauseOnAction: _react2.default.PropTypes.bool,
-	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  slideWidth: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  mode: _react2.default.PropTypes.string,
-	  backgroundColor: _react2.default.PropTypes.string
+	  arrows: _react.PropTypes.bool,
+	  autoPlay: _react.PropTypes.bool,
+	  autoPlayInterval: _react.PropTypes.number,
+	  autoPlayIntervals: _react.PropTypes.arrayOf(_react.PropTypes.number),
+	  cssEase: _react.PropTypes.string,
+	  dots: _react.PropTypes.bool,
+	  duration: _react.PropTypes.number,
+	  initialSlide: _react.PropTypes.number,
+	  pauseOnAction: _react.PropTypes.bool,
+	  slides: _react.PropTypes.array,
+	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  mode: _react.PropTypes.string,
+	  backgroundColor: _react.PropTypes.string
 	};
 	ReactSCarousel.defaultProps = {
 	  arrows: true,
 	  autoPlay: true,
 	  autoPlayInterval: 3000,
+	  autoPlayIntervals: [],
 	  cssEase: "ease-in-out",
 	  dots: true,
 	  duration: 500,
@@ -511,15 +515,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	Slides.propTypes = {
-	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  slideWidth: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  index: _react2.default.PropTypes.number,
-	  duration: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string,
-	  loop: _react2.default.PropTypes.func,
-	  onClickSlide: _react2.default.PropTypes.func,
-	  onTransitionEnd: _react2.default.PropTypes.func
+	  slides: _react.PropTypes.array,
+	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  index: _react.PropTypes.number,
+	  duration: _react.PropTypes.number,
+	  cssEase: _react.PropTypes.string,
+	  loop: _react.PropTypes.func,
+	  onClickSlide: _react.PropTypes.func,
+	  onTransitionEnd: _react.PropTypes.func
 	};
 	Slides.defaultProps = {
 	  slides: [],
@@ -659,18 +663,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 
 	Slides.propTypes = {
-	  slides: _react2.default.PropTypes.array,
-	  width: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  height: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.number, _react2.default.PropTypes.string]),
-	  index: _react2.default.PropTypes.number,
-	  count: _react2.default.PropTypes.number,
-	  duration: _react2.default.PropTypes.number,
-	  cssEase: _react2.default.PropTypes.string,
-	  loop: _react2.default.PropTypes.func,
-	  onClickSlide: _react2.default.PropTypes.func,
-	  onTransitionEnd: _react2.default.PropTypes.func,
-	  mode: _react2.default.PropTypes.string,
-	  backgroundColor: _react2.default.PropTypes.string
+	  slides: _react.PropTypes.array,
+	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  height: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
+	  index: _react.PropTypes.number,
+	  count: _react.PropTypes.number,
+	  duration: _react.PropTypes.number,
+	  cssEase: _react.PropTypes.string,
+	  loop: _react.PropTypes.func,
+	  onClickSlide: _react.PropTypes.func,
+	  onTransitionEnd: _react.PropTypes.func,
+	  mode: _react.PropTypes.string,
+	  backgroundColor: _react.PropTypes.string
 	};
 	Slides.defaultProps = {
 	  slides: [],

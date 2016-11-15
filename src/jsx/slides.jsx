@@ -1,6 +1,6 @@
 "use strict";
 
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import _ from "lodash";
 import classnames from "classnames";
 
@@ -45,21 +45,21 @@ class Slides extends Component {
 }
 
 Slides.propTypes = {
-  slides         : React.PropTypes.array,
-  width          : React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string
+  slides         : PropTypes.array,
+  width          : PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
   ]),
-  slideWidth     : React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.string
+  slideWidth     : PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
   ]),
-  index          : React.PropTypes.number,
-  duration       : React.PropTypes.number,
-  cssEase        : React.PropTypes.string,
-  loop           : React.PropTypes.func,
-  onClickSlide   : React.PropTypes.func,
-  onTransitionEnd: React.PropTypes.func,
+  index          : PropTypes.number,
+  duration       : PropTypes.number,
+  cssEase        : PropTypes.string,
+  loop           : PropTypes.func,
+  onClickSlide   : PropTypes.func,
+  onTransitionEnd: PropTypes.func,
 };
 Slides.defaultProps = {
   slides         : [],
