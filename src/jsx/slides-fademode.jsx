@@ -1,27 +1,15 @@
 "use strict";
 
 import React, { Component, PropTypes } from "react";
-import _ from "lodash";
 import classnames from "classnames";
 
 class Slides extends Component {
   constructor (props) {
     super(props);
   }
-  componentDidUpdate (prevProps) {
-    if (!this.props.enableTransition) {
-      _.defer(this.props.loop);
-    }
-  }
-  onTransitionEnd (e) {
-    var el = e.currentTarget;
-    if (el.style.opacity == 0) {
-      el.style.display = "none";
-    }
-  }
   render () {
     var count = this.props.slides.length;
-    var transition = this.props.enableTransition ? `opacity ${this.props.duration}ms ${this.props.cssEase}` : "none";
+    var transition = `opacity ${this.props.duration}ms ${this.props.cssEase}`;
     var index = this.props.index;
     var prevIndex = index - 1 >= 0 ? index -1 : this.props.slides.length - 1;
     var slides = this.props.slides.map((slide, i) => {
@@ -39,9 +27,8 @@ class Slides extends Component {
         position: "absolute",
         top: 0,
         left: 0,
-        opacity: isActive ? 1 : 0,
-        display: isPrev || isActive ? "block" : "none",
-        transition: isPrev || isActive || isNext ? transition : "none"
+        opacity: isPrev || isNext ? 0 : 1,
+        transition: transition
       };
       switch(true) {
         case isPrev:
@@ -54,12 +41,11 @@ class Slides extends Component {
           style.zIndex = this.props.count - 1;
           break;
         default:
-          style.zIndex = 9999;
+          style.zIndex = -9999;
       }
       return (
         <div key={`slide${i}`} className={cName}
-          style={style} onClick={this.props.onClickSlide}
-          onTransitionEnd={this.onTransitionEnd.bind(this)}>
+          style={style} onClick={this.props.onClickSlide}>
           {slide}
         </div>
       );
@@ -93,11 +79,9 @@ Slides.propTypes = {
   count          : PropTypes.number,
   duration       : PropTypes.number,
   cssEase        : PropTypes.string,
-  loop           : PropTypes.func,
   onClickSlide   : PropTypes.func,
-  onTransitionEnd: PropTypes.func,
   mode           : PropTypes.string,
-  backgroundColor: PropTypes.string,
+  backgroundColor: PropTypes.string
 };
 Slides.defaultProps = {
   slides         : [],
@@ -107,9 +91,7 @@ Slides.defaultProps = {
   count          : 0,
   duration       : 500,
   cssEase        : "ease-in-out",
-  loop           : function () {},
   onClickSlide   : function () {},
-  onTransitionEnd: function () {},
   mode           : "slide",
   backgroundColor: "white"
 };
