@@ -54,7 +54,7 @@ class ReactSCarousel extends Component {
       playing: true,
       enableClick: true
     });
-    var index = this.state.index % 3;
+    var index = this.state.index % this.props.slides.length;
     var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
     clearTimeout(this.state.timer);
     this.setState({
@@ -179,7 +179,8 @@ class ReactSCarousel extends Component {
       onTransitionEnd : this.onTransitionEnd.bind(this),
       enableTransition: this.state.enableTransition,
       mode            : this.props.mode,
-      onChange        : this.props.onChange
+      onChange        : this.props.onChange,
+      onInit          : this.props.onInit
     };
 
     if (this.props.dots) {
@@ -264,7 +265,8 @@ ReactSCarousel.propTypes = {
   ]),
   mode             : PropTypes.string,
   backgroundColor  : PropTypes.string,
-  onChange         : PropTypes.func
+  onChange         : PropTypes.func,
+  onInit           : PropTypes.func
 };
 ReactSCarousel.defaultProps = {
   arrows           : true,
@@ -280,7 +282,8 @@ ReactSCarousel.defaultProps = {
   width            : "auto",
   mode             : "slide",
   backgroundColor  : "white",
-  onChange         : function () {}
+  onChange         : function () {},
+  onInit           : function () {}
 };
 
 export default ReactSCarousel;

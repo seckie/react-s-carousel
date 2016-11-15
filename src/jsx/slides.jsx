@@ -8,6 +8,9 @@ class Slides extends Component {
   constructor (props) {
     super(props);
   }
+  componentDidMount () {
+    this.props.onInit(this.props);
+  }
   componentDidUpdate (prevProps) {
     if (!this.props.enableTransition) {
       _.defer(this.props.loop);
@@ -64,7 +67,8 @@ Slides.propTypes = {
   loop           : PropTypes.func,
   onClickSlide   : PropTypes.func,
   onTransitionEnd: PropTypes.func,
-  onChange       : PropTypes.func
+  onChange       : PropTypes.func,
+  onInit         : PropTypes.func
 };
 Slides.defaultProps = {
   slides         : [],
@@ -76,7 +80,8 @@ Slides.defaultProps = {
   loop           : function () {},
   onClickSlide   : function () {},
   onTransitionEnd: function () {},
-  onChange       : function () {}
+  onChange       : function () {},
+  onInit         : function () {}
 };
 
 

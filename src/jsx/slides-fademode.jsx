@@ -7,6 +7,9 @@ class Slides extends Component {
   constructor (props) {
     super(props);
   }
+  componentDidMount () {
+    this.props.onInit(this.props);
+  }
   onTransitionEnd () {
     this.props.onChange(this.props);
   }
@@ -86,7 +89,8 @@ Slides.propTypes = {
   onClickSlide   : PropTypes.func,
   mode           : PropTypes.string,
   backgroundColor: PropTypes.string,
-  onChange       : PropTypes.func
+  onChange       : PropTypes.func,
+  onInit         : PropTypes.func
 };
 Slides.defaultProps = {
   slides         : [],
@@ -99,7 +103,8 @@ Slides.defaultProps = {
   onClickSlide   : function () {},
   mode           : "slide",
   backgroundColor: "white",
-  onChange       : function () {}
+  onChange       : function () {},
+  onInit         : function () {}
 };
 
 

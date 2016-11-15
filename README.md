@@ -20,3 +20,5 @@ width         | number or string | "auto" | pixel width of slider viewport
 slideWidth    | number or string | "auto" | pixel width of each slide
 mode          | string | "slide" | transition effect type: "slide" or "fade"
 backgroundColor | string | "white" | value of CSS "background-color"
+onInit     | function | function(props){} | will be fired when the slider was initialized
+onChange   | function | function(props){} | will be fired when the slider was changed

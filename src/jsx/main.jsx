@@ -32,7 +32,8 @@ class App extends Component {
         mode="slide" autoPlayIntervals=[1000,5000,2000]
         </h2>
         <Carousel mode="slide" autoPlayIntervals={[1000,5000,2000]}
-          onChange={function(props) { console.info(props); }}/>
+        onChange={function(props) { console.info(props); }}
+        onInit={function(props) {console.info('init ', props);}}/>
 
         <h2 style={hStyle}>
         mode="fade"
