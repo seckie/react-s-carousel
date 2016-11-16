@@ -109,9 +109,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      timer: 0,
 	      index: props.initialSlide + clonedCount,
 	      count: 0,
-	      playing: props.autoPlay,
 	      enableTransition: true
 	    };
+
+	    // These props area NOT associated to render().
+	    // So they shouldn't be menber of "state".
+	    _this.playing = props.autoPlay;
+	    _this.enableClick = true;
+	    _this.clicked = false;
+	    _this.timer = null;
 	    return _this;
 	  }
 
@@ -122,46 +128,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.setState({
 	        width: el.clientWidth
 	      });
-	      if (this.state.playing) {
+	      if (this.playing) {
 	        this._setTimer();
 	      }
 	    }
 	  }, {
 	    key: "componentWillUpdate",
 	    value: function componentWillUpdate(nextProps) {
+	      // changed 'autoPlay' prop
 	      if (this.props.autoPlay !== nextProps.autoPlay) {
-	        this.setState({
-	          playing: nextProps.autoPlay
-	        });
+	        this.playing = nextProps.autoPlay;
 	        if (nextProps.autoPlay) {
-	          clearTimeout(this.state.timer);
 	          this._setTimer();
 	        }
 	      }
 	    }
 	  }, {
-	    key: "_tick",
-	    value: function _tick() {
-	      if (!this.state.playing) {
-	        clearTimeout(this.state.timer);
-	        return;
-	      }
-	      this._updateIndex(this.state.index + 1);
-	      this._setTimer();
-	    }
-	  }, {
 	    key: "_setTimer",
 	    value: function _setTimer() {
-	      this.setState({
-	        playing: true,
-	        enableClick: true
-	      });
+	      var _this2 = this;
+
 	      var index = this.state.index % this.props.slides.length;
 	      var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
-	      clearTimeout(this.state.timer);
-	      this.setState({
-	        timer: setTimeout(this._tick.bind(this), interval)
-	      });
+	      interval += this.props.duration;
+	      clearTimeout(this.timer);
+	      this.timer = setTimeout(function () {
+	        if (_this2.playing === false) {
+	          return;
+	        }
+	        _this2._updateIndex(_this2.state.index + 1);
+	        _this2._setTimer();
+	      }, interval);
 	    }
 	  }, {
 	    key: "_updateIndex",
@@ -183,35 +180,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "_updateStateOnClick",
 	    value: function _updateStateOnClick() {
-	      this.setState({
-	        playing: false,
-	        enableClick: false
-	      });
-	      this._setTimer();
+	      this.playing = false;
+	      this.enableClick = false;
+	      this.clicked = true;
 	    }
 	  }, {
 	    key: "onClickNext",
 	    value: function onClickNext() {
-	      if (this.state.enableClick) {
+	      if (this.enableClick) {
 	        var index = this.state.index + 1;
 	        this._updateIndex(index);
 	        this._updateStateOnClick();
+	      } else {
+	        console.info('click disabled');
 	      }
 	    }
 	  }, {
 	    key: "onClickPrev",
 	    value: function onClickPrev() {
-	      if (this.state.enableClick) {
+	      if (this.enableClick) {
 	        var index = this.state.index - 1;
 	        var count = this.state.count - 1;
 	        this._updateIndex(index, count);
 	        this._updateStateOnClick();
+	      } else {
+	        console.info('click disabled');
 	      }
 	    }
 	  }, {
 	    key: "onClickDot",
 	    value: function onClickDot(e) {
-	      if (this.state.enableClick) {
+	      if (this.enableClick) {
 	        var index = +e.currentTarget.dataset.index;
 	        if (index !== this.state.index) {
 	          this._updateIndex(index);
@@ -221,30 +220,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: "onClickSlide",
-	    value: function onClickSlide(e) {
-	      if (this.props.pauseOnAction) {
-	        this.setState({ playing: false });
-	      }
-	    }
+	    value: function onClickSlide(e) {}
 	  }, {
 	    key: "onMouseEnterSlide",
 	    value: function onMouseEnterSlide(e) {
 	      if (this.props.autoPlay) {
-	        this.setState({
-	          playing: false,
-	          enableClick: false
-	        });
+	        this.playing = false;
+	        this.enableClick = false;
 	      }
 	    }
 	  }, {
 	    key: "onMouseLeaveSlide",
 	    value: function onMouseLeaveSlide(e) {
 	      if (this.props.autoPlay) {
-	        this.setState({
-	          playing: true,
-	          enableClick: true
-	        });
-	        this._setTimer();
+	        this.playing = true;
+	        this.enableClick = true;
 	      }
 	    }
 	  }, {
@@ -257,10 +247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "onTransitionEnd",
 	    value: function onTransitionEnd() {
-	      var state = {
-	        enableClick: true,
-	        playing: true
-	      };
+	      var state = {};
 	      var min = 0;
 	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
 	      if (this.state.index <= min) {
@@ -272,20 +259,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        state.enableTransition = true;
 	      }
-	      if (!this.state.playing) {
-	        clearTimeout(this.state.timer);
-	        var isAfterClick = this.state.enableClick === false;
-	        var shouldBePause = isAfterClick && this.props.pauseOnAction;
-	        if (this.props.autoPlay && !shouldBePause) {
-	          this._setTimer();
-	        }
+
+	      if (this.props.autoPlay && this.clicked) {
+	        this.playing = true;
+	        this._setTimer();
 	      }
+	      this.clicked = false;
+	      this.enableClick = true;
 	      this.setState(state);
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (this.props.width === "auto" && !this.state.width) {
 	        return _react2.default.createElement("div", { className: "scarousel" });
@@ -311,12 +297,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (this.props.dots) {
 	        var dots = slides.map(function (slide, i) {
-	          if (i < _this2.props.slides.length || _this2.props.slides.length * 2 <= i) {
+	          if (i < _this3.props.slides.length || _this3.props.slides.length * 2 <= i) {
 	            return "";
 	          }
-	          var count = _this2.props.slides.length;
+	          var count = _this3.props.slides.length;
 	          var i2 = i % count;
-	          var stateIndex = _this2.state.index % count;
+	          var stateIndex = _this3.state.index % count;
 	          var cName = (0, _classnames2.default)(PREFIX + "-dot", {
 	            active: stateIndex === i2
 	          });
@@ -324,7 +310,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "button",
 	            { className: cName, key: "dot" + i,
 	              "data-index": i2,
-	              onClick: _this2.onClickDot.bind(_this2) },
+	              onClick: _this3.onClickDot.bind(_this3) },
 	            i2
 	          );
 	        });
@@ -388,7 +374,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dots: _react.PropTypes.bool,
 	  duration: _react.PropTypes.number,
 	  initialSlide: _react.PropTypes.number,
-	  pauseOnAction: _react.PropTypes.bool,
 	  slides: _react.PropTypes.array,
 	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
@@ -406,7 +391,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dots: true,
 	  duration: 500,
 	  initialSlide: 0,
-	  pauseOnAction: true,
 	  slides: [],
 	  width: "auto",
 	  mode: "slide",
@@ -490,7 +474,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "componentDidUpdate",
 	    value: function componentDidUpdate(prevProps) {
-	      if (!this.props.enableTransition) {
+	      if (this.props.enableTransition === false) {
 	        _lodash2.default.defer(this.props.loop);
 	      }
 	    }

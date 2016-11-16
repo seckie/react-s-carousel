@@ -1,6 +1,6 @@
 {
   "name": "react-s-carousel",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": "dist/react-s-carousel.js",
   "description": "React simple carousel component",
   "scripts": {
