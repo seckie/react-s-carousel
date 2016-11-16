@@ -12,7 +12,7 @@ class Slides extends Component {
     this.props.onInit(this.props);
   }
   componentDidUpdate (prevProps) {
-    if (!this.props.enableTransition) {
+    if (this.props.enableTransition === false) {
       _.defer(this.props.loop);
     }
   }
