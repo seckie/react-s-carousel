@@ -24,6 +24,7 @@ class ReactSCarousel extends Component {
     // So they shouldn't be menber of "state".
     this.playing = props.autoPlay;
     this.enableClick = true;
+    this.timer = null;
   }
   componentDidMount () {
     var el = ReactDOM.findDOMNode(this);
@@ -35,32 +36,24 @@ class ReactSCarousel extends Component {
     }
   }
   componentWillUpdate (nextProps) {
+    // changed 'autoPlay' prop
     if (this.props.autoPlay !== nextProps.autoPlay) {
       this.playing = nextProps.autoPlay;
       if (nextProps.autoPlay) {
-        clearTimeout(this.state.timer);
         this._setTimer();
       }
     }
   }
-  _tick () {
-    if (this.playing === false) {
-      clearTimeout(this.state.timer);
-      return;
-    }
-    this._updateIndex(this.state.index + 1);
-    this._setTimer();
-  }
   _setTimer () {
-    this.playing = true;
-    this.enableClick = true;
-
     var index = this.state.index % this.props.slides.length;
     var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
-    clearTimeout(this.state.timer);
-    this.setState({
-      timer: setTimeout(this._tick.bind(this), interval)
-    });
+    interval += this.props.duration;
+    clearTimeout(this.timer);
+    this.timer = setTimeout(() => {
+      if (this.playing === false) { return; }
+      this._updateIndex(this.state.index + 1);
+      this._setTimer();
+    }, interval);
   }
   _updateIndex (index, count) {
     var min = 0;
@@ -80,10 +73,9 @@ class ReactSCarousel extends Component {
   _updateStateOnClick () {
     this.playing = false;
     this.enableClick = false;
-    this._setTimer();
   }
   onClickNext () {
-    if (this.state.enableClick) {
+    if (this.enableClick) {
       var index = this.state.index + 1;
       this._updateIndex(index);
       this._updateStateOnClick();
@@ -92,7 +84,7 @@ class ReactSCarousel extends Component {
     }
   }
   onClickPrev () {
-    if (this.state.enableClick) {
+    if (this.enableClick) {
       var index = this.state.index - 1;
       var count = this.state.count - 1
       this._updateIndex(index, count);
@@ -102,7 +94,7 @@ class ReactSCarousel extends Component {
     }
   }
   onClickDot (e) {
-    if (this.state.enableClick) {
+    if (this.enableClick) {
       var index = +e.currentTarget.dataset.index;
       if (index !== this.state.index) {
         this._updateIndex(index);
@@ -125,7 +117,6 @@ class ReactSCarousel extends Component {
     if (this.props.autoPlay) {
       this.playing = true;
       this.enableClick = true;
-      this._setTimer();
     }
   }
   loop () {
@@ -134,9 +125,6 @@ class ReactSCarousel extends Component {
     });
   }
   onTransitionEnd () {
-    this.enableClick = true;
-    this.playing = true;
-
     var state = {};
     var min = 0;
     var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
@@ -149,14 +137,14 @@ class ReactSCarousel extends Component {
     } else {
       state.enableTransition = true;
     }
-    if (this.playing === false) {
-      clearTimeout(this.state.timer);
-      var isAfterClick = this.state.enableClick === false;
-      var shouldBePause = isAfterClick && this.props.pauseOnAction;
-      if (this.props.autoPlay && !shouldBePause) {
-        this._setTimer();
-      }
+
+    var isAfterClick = this.enableClick === false;
+    var shouldBePause = isAfterClick && this.props.pauseOnAction;
+    if (this.props.autoPlay && shouldBePause === false) {
+      this.playing = true;
     }
+
+    this.enableClick = true;
     this.setState(state);
   }
 

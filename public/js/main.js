@@ -96,6 +96,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        fontSize: 20,
 	        margin: "20px"
 	      };
+	      //        <Carousel mode="slide" width={600} slideWidth={200} />
+	      //        <Carousel mode="fade" />
 	      return _react2.default.createElement(
 	        "div",
 	        { style: { position: "relative" } },
@@ -104,7 +106,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          { style: hStyle },
 	          "mode=\"slide\", width=600, slideWidth=200"
 	        ),
-	        _react2.default.createElement(Carousel, { mode: "slide", width: 600, slideWidth: 200 }),
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
@@ -116,13 +117,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	          },
 	          onInit: function onInit(props) {
 	            console.info('init ', props);
-	          } }),
+	          },
+	          duration: 3000
+	        }),
 	        _react2.default.createElement(
 	          "h2",
 	          { style: hStyle },
 	          "mode=\"fade\""
-	        ),
-	        _react2.default.createElement(Carousel, { mode: "fade" })
+	        )
 	      );
 	    }
 	  }]);
@@ -20205,6 +20207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // So they shouldn't be menber of "state".
 	    _this.playing = props.autoPlay;
 	    _this.enableClick = true;
+	    _this.timer = null;
 	    return _this;
 	  }
 
@@ -20222,36 +20225,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "componentWillUpdate",
 	    value: function componentWillUpdate(nextProps) {
+	      // changed 'autoPlay' prop
 	      if (this.props.autoPlay !== nextProps.autoPlay) {
 	        this.playing = nextProps.autoPlay;
 	        if (nextProps.autoPlay) {
-	          clearTimeout(this.state.timer);
 	          this._setTimer();
 	        }
 	      }
 	    }
 	  }, {
-	    key: "_tick",
-	    value: function _tick() {
-	      if (this.playing === false) {
-	        clearTimeout(this.state.timer);
-	        return;
-	      }
-	      this._updateIndex(this.state.index + 1);
-	      this._setTimer();
-	    }
-	  }, {
 	    key: "_setTimer",
 	    value: function _setTimer() {
-	      this.playing = true;
-	      this.enableClick = true;
+	      var _this2 = this;
 
 	      var index = this.state.index % this.props.slides.length;
 	      var interval = this.props.autoPlayIntervals[index] || this.props.autoPlayInterval;
-	      clearTimeout(this.state.timer);
-	      this.setState({
-	        timer: setTimeout(this._tick.bind(this), interval)
-	      });
+	      interval += this.props.duration;
+	      clearTimeout(this.timer);
+	      this.timer = setTimeout(function () {
+	        if (_this2.playing === false) {
+	          return;
+	        }
+	        _this2._updateIndex(_this2.state.index + 1);
+	        _this2._setTimer();
+	      }, interval);
 	    }
 	  }, {
 	    key: "_updateIndex",
@@ -20275,12 +20272,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _updateStateOnClick() {
 	      this.playing = false;
 	      this.enableClick = false;
-	      this._setTimer();
 	    }
 	  }, {
 	    key: "onClickNext",
 	    value: function onClickNext() {
-	      if (this.state.enableClick) {
+	      if (this.enableClick) {
 	        var index = this.state.index + 1;
 	        this._updateIndex(index);
 	        this._updateStateOnClick();
@@ -20291,7 +20287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "onClickPrev",
 	    value: function onClickPrev() {
-	      if (this.state.enableClick) {
+	      if (this.enableClick) {
 	        var index = this.state.index - 1;
 	        var count = this.state.count - 1;
 	        this._updateIndex(index, count);
@@ -20303,7 +20299,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "onClickDot",
 	    value: function onClickDot(e) {
-	      if (this.state.enableClick) {
+	      if (this.enableClick) {
 	        var index = +e.currentTarget.dataset.index;
 	        if (index !== this.state.index) {
 	          this._updateIndex(index);
@@ -20332,7 +20328,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.autoPlay) {
 	        this.playing = true;
 	        this.enableClick = true;
-	        this._setTimer();
 	      }
 	    }
 	  }, {
@@ -20345,9 +20340,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "onTransitionEnd",
 	    value: function onTransitionEnd() {
-	      this.enableClick = true;
-	      this.playing = true;
-
 	      var state = {};
 	      var min = 0;
 	      var max = this.props.slides.length - 1 + 2; // +2 is cloned slides
@@ -20360,20 +20352,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } else {
 	        state.enableTransition = true;
 	      }
-	      if (this.playing === false) {
-	        clearTimeout(this.state.timer);
-	        var isAfterClick = this.state.enableClick === false;
-	        var shouldBePause = isAfterClick && this.props.pauseOnAction;
-	        if (this.props.autoPlay && !shouldBePause) {
-	          this._setTimer();
-	        }
+
+	      var isAfterClick = this.enableClick === false;
+	      var shouldBePause = isAfterClick && this.props.pauseOnAction;
+	      if (this.props.autoPlay && shouldBePause === false) {
+	        this.playing = true;
 	      }
+
+	      this.enableClick = true;
 	      this.setState(state);
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      if (this.props.width === "auto" && !this.state.width) {
 	        return _react2.default.createElement("div", { className: "scarousel" });
@@ -20399,12 +20391,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      if (this.props.dots) {
 	        var dots = slides.map(function (slide, i) {
-	          if (i < _this2.props.slides.length || _this2.props.slides.length * 2 <= i) {
+	          if (i < _this3.props.slides.length || _this3.props.slides.length * 2 <= i) {
 	            return "";
 	          }
-	          var count = _this2.props.slides.length;
+	          var count = _this3.props.slides.length;
 	          var i2 = i % count;
-	          var stateIndex = _this2.state.index % count;
+	          var stateIndex = _this3.state.index % count;
 	          var cName = (0, _classnames2.default)(PREFIX + "-dot", {
 	            active: stateIndex === i2
 	          });
@@ -20412,7 +20404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "button",
 	            { className: cName, key: "dot" + i,
 	              "data-index": i2,
-	              onClick: _this2.onClickDot.bind(_this2) },
+	              onClick: _this3.onClickDot.bind(_this3) },
 	            i2
 	          );
 	        });

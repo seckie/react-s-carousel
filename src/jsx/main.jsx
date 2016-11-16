@@ -21,24 +21,26 @@ class App extends Component {
       fontSize: 20,
       margin: "20px",
     };
+//        <Carousel mode="slide" width={600} slideWidth={200} />
+//        <Carousel mode="fade" />
     return (
       <div style={{ position: "relative" }}>
         <h2 style={hStyle}>
          mode="slide", width=600, slideWidth=200
         </h2>
-        <Carousel mode="slide" width={600} slideWidth={200} />
 
         <h2 style={hStyle}>
         mode="slide" autoPlayIntervals=[1000,5000,2000]
         </h2>
         <Carousel mode="slide" autoPlayIntervals={[1000,5000,2000]}
         onChange={function(props) { console.info(props); }}
-        onInit={function(props) {console.info('init ', props);}}/>
+        onInit={function(props) {console.info('init ', props);}}
+        duration={3000}
+        />
 
         <h2 style={hStyle}>
         mode="fade"
         </h2>
-        <Carousel mode="fade" />
       </div>
     );
   }
