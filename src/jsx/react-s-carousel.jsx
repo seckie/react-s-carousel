@@ -24,6 +24,7 @@ class ReactSCarousel extends Component {
     // So they shouldn't be menber of "state".
     this.playing = props.autoPlay;
     this.enableClick = true;
+    this.clicked = false;
     this.timer = null;
   }
   componentDidMount () {
@@ -73,6 +74,7 @@ class ReactSCarousel extends Component {
   _updateStateOnClick () {
     this.playing = false;
     this.enableClick = false;
+    this.clicked = true;
   }
   onClickNext () {
     if (this.enableClick) {
@@ -103,9 +105,6 @@ class ReactSCarousel extends Component {
     }
   }
   onClickSlide (e) {
-    if (this.props.pauseOnAction) {
-      this.playing = false;
-    }
   }
   onMouseEnterSlide (e) {
     if (this.props.autoPlay) {
@@ -138,12 +137,11 @@ class ReactSCarousel extends Component {
       state.enableTransition = true;
     }
 
-    var isAfterClick = this.enableClick === false;
-    var shouldBePause = isAfterClick && this.props.pauseOnAction;
-    if (this.props.autoPlay && shouldBePause === false) {
+    if (this.props.autoPlay && this.clicked) {
       this.playing = true;
+      this._setTimer();
     }
-
+    this.clicked = false;
     this.enableClick = true;
     this.setState(state);
   }
@@ -242,7 +240,6 @@ ReactSCarousel.propTypes = {
   dots             : PropTypes.bool,
   duration         : PropTypes.number,
   initialSlide     : PropTypes.number,
-  pauseOnAction    : PropTypes.bool,
   slides           : PropTypes.array,
   width            : PropTypes.oneOfType([
     PropTypes.number,
@@ -266,7 +263,6 @@ ReactSCarousel.defaultProps = {
   dots             : true,
   duration         : 500,
   initialSlide     : 0,
-  pauseOnAction    : true,
   slides           : [],
   width            : "auto",
   mode             : "slide",

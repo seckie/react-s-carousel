@@ -14,7 +14,6 @@ cssEase   | string  | "ease-in-out" | value of CSS "transition-timing-function"
 dots      | boolean | true | show dots navigation represents current slide
 duration  | number  | 500  | value of CSS "transition-duration"
 initialSlide | number | 0  | index number of initial slide
-pauseOnAction | boolean | true | pause auto playing when clicking slides
 slides        | array   | []   | array of components to each slide to render
 width         | number or string | "auto" | pixel width of slider viewport
 slideWidth    | number or string | "auto" | pixel width of each slide

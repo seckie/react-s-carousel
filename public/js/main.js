@@ -20207,6 +20207,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // So they shouldn't be menber of "state".
 	    _this.playing = props.autoPlay;
 	    _this.enableClick = true;
+	    _this.clicked = false;
 	    _this.timer = null;
 	    return _this;
 	  }
@@ -20272,6 +20273,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function _updateStateOnClick() {
 	      this.playing = false;
 	      this.enableClick = false;
+	      this.clicked = true;
 	    }
 	  }, {
 	    key: "onClickNext",
@@ -20309,11 +20311,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: "onClickSlide",
-	    value: function onClickSlide(e) {
-	      if (this.props.pauseOnAction) {
-	        this.playing = false;
-	      }
-	    }
+	    value: function onClickSlide(e) {}
 	  }, {
 	    key: "onMouseEnterSlide",
 	    value: function onMouseEnterSlide(e) {
@@ -20353,12 +20351,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        state.enableTransition = true;
 	      }
 
-	      var isAfterClick = this.enableClick === false;
-	      var shouldBePause = isAfterClick && this.props.pauseOnAction;
-	      if (this.props.autoPlay && shouldBePause === false) {
+	      if (this.props.autoPlay && this.clicked) {
 	        this.playing = true;
+	        this._setTimer();
 	      }
-
+	      this.clicked = false;
 	      this.enableClick = true;
 	      this.setState(state);
 	    }
@@ -20468,7 +20465,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dots: _react.PropTypes.bool,
 	  duration: _react.PropTypes.number,
 	  initialSlide: _react.PropTypes.number,
-	  pauseOnAction: _react.PropTypes.bool,
 	  slides: _react.PropTypes.array,
 	  width: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
 	  slideWidth: _react.PropTypes.oneOfType([_react.PropTypes.number, _react.PropTypes.string]),
@@ -20486,7 +20482,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  dots: true,
 	  duration: 500,
 	  initialSlide: 0,
-	  pauseOnAction: true,
 	  slides: [],
 	  width: "auto",
 	  mode: "slide",
