@@ -81,8 +81,6 @@ class ReactSCarousel extends Component {
       var index = this.state.index + 1;
       this._updateIndex(index);
       this._updateStateOnClick();
-    } else {
-      console.info('click disabled');
     }
   }
   onClickPrev () {
@@ -91,8 +89,6 @@ class ReactSCarousel extends Component {
       var count = this.state.count - 1
       this._updateIndex(index, count);
       this._updateStateOnClick();
-    } else {
-      console.info('click disabled');
     }
   }
   onClickDot (e) {

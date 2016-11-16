@@ -191,8 +191,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var index = this.state.index + 1;
 	        this._updateIndex(index);
 	        this._updateStateOnClick();
-	      } else {
-	        console.info('click disabled');
 	      }
 	    }
 	  }, {
@@ -203,8 +201,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var count = this.state.count - 1;
 	        this._updateIndex(index, count);
 	        this._updateStateOnClick();
-	      } else {
-	        console.info('click disabled');
 	      }
 	    }
 	  }, {
